@@ -61,6 +61,23 @@ Las capturas muestran una ejecución real del sitio, no un mockup.
 
 ![Portada en móvil](screenshots/mobile.webp)
 
-## Pendiente de publicación
+## Publicación verificada
 
-Falta integrar el pull request y verificar la publicación de producción. La prueba de acceso desde una conexión en Cuba requiere una comprobación del usuario.
+- Web pública: https://pideundeseo-cuba.pages.dev.
+- Pull request #1 integrado tras revisar la vista previa y los checks de GitHub.
+- Commit de lanzamiento: `b7e7a4183c67bf68b569179cb740184716501475`.
+- Despliegue automático de GitHub a Cloudflare Pages comprobado.
+- HTTPS 200, URL canónica correcta, producción indexable, robots y sitemap correctos.
+- Imagen social disponible y ruta inexistente con respuesta 404.
+- Fotografías cargadas, galería y retorno del foco correctos, sin errores JavaScript.
+- Sin desbordes a 360, 390, 768 y 1440 px sobre producción.
+- Contenido y 20 enlaces de WhatsApp disponibles sin JavaScript.
+- Pendiente únicamente la comprobación del usuario desde una conexión en Cuba.
+
+## Lighthouse móvil en producción
+
+Auditoría del 3 de octubre de 2026 sobre https://pideundeseo-cuba.pages.dev:
+**100 rendimiento / 100 accesibilidad / 100 buenas prácticas / 100 SEO**.
+FCP 1,2 s, LCP 1,5 s, TBT 0 ms y CLS 0. Es una medición de laboratorio;
+no sustituye la comprobación desde conexiones móviles reales en Cuba.
+Informes locales: `artifacts/lighthouse-production.report.html` y `.json`.

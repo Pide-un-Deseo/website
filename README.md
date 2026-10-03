@@ -4,8 +4,8 @@ Web en español de **Pide un Deseo**, servicio de princesas y animación infanti
 en La Habana. Presenta personajes, experiencias, eventos y contacto directo
 por WhatsApp, Instagram y Facebook.
 
-**Estado:** conectado a Cloudflare Pages mediante GitHub.
-URL de producción configurada: https://pideundeseo-cuba.pages.dev.
+**Estado:** publicada en Cloudflare Pages con despliegue automático desde GitHub.
+**Web:** https://pideundeseo-cuba.pages.dev.
 Las ramas de trabajo tienen vistas previas no indexables.
 
 ## Desarrollo local
