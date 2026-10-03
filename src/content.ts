@@ -1,5 +1,22 @@
 export type Photo = { id: string; alt: string; position?: string };
-export type Character = { name: string; caption: string; photo?: Photo };
+export type CharacterId =
+  | "huntrix"
+  | "cenicienta"
+  | "rapunzel"
+  | "ariel"
+  | "moana"
+  | "blancanieves"
+  | "elsa"
+  | "anna"
+  | "barbie"
+  | "bella";
+export type Character = {
+  id: CharacterId;
+  name: string;
+  caption: string;
+  photo?: Photo;
+};
+export type GalleryPhoto = Photo & { characterId: CharacterId };
 export const business = {
   name: "Pide un Deseo",
   handle: "@pideundeseo.cuba",
@@ -12,6 +29,7 @@ export const business = {
 };
 export const characters: Character[] = [
   {
+    id: "huntrix",
     name: "Huntrix",
     caption: "Una celebración con ritmo propio",
     photo: {
@@ -20,6 +38,7 @@ export const characters: Character[] = [
     },
   },
   {
+    id: "cenicienta",
     name: "Cenicienta",
     caption: "La magia de un cuento",
     photo: {
@@ -28,6 +47,7 @@ export const characters: Character[] = [
     },
   },
   {
+    id: "rapunzel",
     name: "Rapunzel",
     caption: "Una aventura llena de ilusión",
     photo: {
@@ -36,6 +56,7 @@ export const characters: Character[] = [
     },
   },
   {
+    id: "ariel",
     name: "Ariel",
     caption: "Un mundo por descubrir",
     photo: {
@@ -44,11 +65,13 @@ export const characters: Character[] = [
     },
   },
   {
+    id: "moana",
     name: "Moana",
     caption: "El espíritu de la aventura",
     photo: { id: "moana", alt: "Nuestra animadora caracterizada como Moana" },
   },
   {
+    id: "blancanieves",
     name: "Blancanieves",
     caption: "La dulzura de los clásicos",
     photo: {
@@ -56,10 +79,10 @@ export const characters: Character[] = [
       alt: "Blancanieves con su vestido amarillo en un jardín",
     },
   },
-  { name: "Elsa", caption: "Una invitada llena de magia" },
-  { name: "Anna", caption: "Alegría para compartir" },
-  { name: "Barbie", caption: "Una celebración a todo color" },
-  { name: "Bella", caption: "Un encuentro de cuento" },
+  { id: "elsa", name: "Elsa", caption: "Una invitada llena de magia" },
+  { id: "anna", name: "Anna", caption: "Alegría para compartir" },
+  { id: "barbie", name: "Barbie", caption: "Una celebración a todo color" },
+  { id: "bella", name: "Bella", caption: "Un encuentro de cuento" },
 ];
 export const services = [
   {
@@ -104,57 +127,87 @@ export const events = [
     icon: "sparkle" as const,
   },
 ];
-export const gallery: Photo[] = [
+export const gallery: GalleryPhoto[] = [
   {
     id: "rapunzel-jardin",
+    characterId: "rapunzel",
     alt: "Rapunzel entre árboles, con su larga trenza decorada con flores",
   },
   {
     id: "ariel-retrato",
+    characterId: "ariel",
     position: "center 20%",
     alt: "Retrato de Ariel sonriendo con su vestuario azul",
   },
   {
     id: "huntrix-poses",
+    characterId: "huntrix",
     position: "center 20%",
     alt: "Las animadoras de Huntrix interpretando una pose del grupo",
   },
   {
     id: "cenicienta-fiesta",
+    characterId: "cenicienta",
     alt: "Cenicienta con su vestido azul en una decoración de cuento",
   },
   {
     id: "blancanieves-jardin",
+    characterId: "blancanieves",
     alt: "Blancanieves sentada junto a las flores del jardín",
   },
   {
     id: "detalle-rapunzel",
+    characterId: "rapunzel",
     alt: "Detalles del vestido, la trenza y los accesorios de Rapunzel",
   },
-  { id: "ariel", alt: "Ariel con su vestido azul junto a un muro de piedra" },
+  {
+    id: "ariel",
+    characterId: "ariel",
+    alt: "Ariel con su vestido azul junto a un muro de piedra",
+  },
   {
     id: "blancanieves",
+    characterId: "blancanieves",
     alt: "Blancanieves sentada entre la hierba y las flores",
   },
-  { id: "rapunzel", alt: "Rapunzel con su trenza de flores junto a un árbol" },
+  {
+    id: "rapunzel",
+    characterId: "rapunzel",
+    alt: "Rapunzel con su trenza de flores junto a un árbol",
+  },
   {
     id: "rapunzel-portada",
+    characterId: "rapunzel",
     alt: "Rapunzel con su vestido lila y su larga trenza",
   },
-  { id: "cenicienta", alt: "Cenicienta con su vestido azul de princesa" },
+  {
+    id: "cenicienta",
+    characterId: "cenicienta",
+    alt: "Cenicienta con su vestido azul de princesa",
+  },
   {
     id: "cenicienta-retrato",
+    characterId: "cenicienta",
     alt: "Retrato de Cenicienta sonriendo con sus guantes y vestido azul",
   },
   {
     id: "huntrix",
+    characterId: "huntrix",
     alt: "Las tres animadoras de Huntrix con su vestuario de colores al aire libre",
   },
   {
     id: "moana",
+    characterId: "moana",
     alt: "Moana con una flor en el cabello junto a una vidriera de colores",
   },
 ];
+export function getCharacterPhotos(character: Character): GalleryPhoto[] {
+  const photos = gallery.filter((photo) => photo.characterId === character.id);
+  const cover = photos.find((photo) => photo.id === character.photo?.id);
+  return cover
+    ? [cover, ...photos.filter((photo) => photo.id !== cover.id)]
+    : photos;
+}
 export const values = [
   {
     title: "Personajes que cobran vida",

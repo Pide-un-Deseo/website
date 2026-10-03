@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { gallery } from "../content";
 import { Photo } from "./Photo";
 import { Icon } from "./Icon";
+import { Lightbox } from "./Lightbox";
 
 export function Gallery() {
   const [selected, setSelected] = useState<number | null>(null);
@@ -11,9 +12,7 @@ export function Gallery() {
     end: false,
   });
   const trackRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLAnchorElement | null>(null);
-  const isOpen = selected !== null;
 
   useEffect(() => {
     const track = trackRef.current;
@@ -33,20 +32,6 @@ export function Gallery() {
       observer.disconnect();
     };
   }, []);
-
-  // Changing photos must not close the dialog or restore the opener's focus.
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog || !isOpen) return;
-    dialog.showModal();
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      dialog.close();
-      document.body.style.overflow = previousOverflow;
-      openerRef.current?.focus();
-    };
-  }, [isOpen]);
 
   const moveTrack = (direction: number) => {
     const track = trackRef.current;
@@ -73,13 +58,6 @@ export function Gallery() {
         : "smooth",
     });
   };
-  const movePhoto = (direction: number) =>
-    setSelected((current) =>
-      current === null
-        ? null
-        : Math.max(0, Math.min(gallery.length - 1, current + direction)),
-    );
-  const photo = selected === null ? undefined : gallery[selected];
   if (!gallery.length) return null;
 
   return (
@@ -167,88 +145,12 @@ export function Gallery() {
           ))}
         </div>
       </div>
-      <dialog
-        ref={dialogRef}
-        className="lightbox"
-        aria-label="Fotografía ampliada"
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-            event.preventDefault();
-            movePhoto(event.key === "ArrowLeft" ? -1 : 1);
-          }
-          if (event.key === "Tab") {
-            const buttons = Array.from(
-              event.currentTarget.querySelectorAll<HTMLButtonElement>(
-                "button:not(:disabled)",
-              ),
-            );
-            const first = buttons[0];
-            const last = buttons[buttons.length - 1];
-            if (event.shiftKey && document.activeElement === first) {
-              event.preventDefault();
-              last?.focus();
-            } else if (!event.shiftKey && document.activeElement === last) {
-              event.preventDefault();
-              first?.focus();
-            }
-          }
-        }}
-        onCancel={(event) => {
-          event.preventDefault();
-          setSelected(null);
-        }}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) setSelected(null);
-        }}
-      >
-        {photo && (
-          <div className="lightbox-content">
-            <button
-              type="button"
-              className="lightbox-close"
-              autoFocus
-              onClick={() => setSelected(null)}
-              aria-label="Cerrar fotografía"
-            >
-              <Icon name="close" />
-            </button>
-            <img
-              src={`/images/${photo.id}-1200.webp`}
-              alt={photo.alt}
-              width="800"
-              height="1000"
-            />
-            <p>{photo.alt}</p>
-            <div className="lightbox-navigation">
-              {gallery.length > 1 && (
-                <button
-                  type="button"
-                  className="gallery-control"
-                  aria-label="Foto anterior"
-                  aria-disabled={selected === 0}
-                  onClick={() => movePhoto(-1)}
-                >
-                  <Icon name="arrow" className="arrow-previous" />
-                </button>
-              )}
-              <span role="status" aria-live="polite" aria-atomic="true">
-                Foto {(selected ?? 0) + 1} de {gallery.length}
-              </span>
-              {gallery.length > 1 && (
-                <button
-                  type="button"
-                  className="gallery-control"
-                  aria-label="Foto siguiente"
-                  aria-disabled={selected === gallery.length - 1}
-                  onClick={() => movePhoto(1)}
-                >
-                  <Icon name="arrow" />
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-      </dialog>
+      <Lightbox
+        photos={gallery}
+        selected={selected}
+        onSelect={setSelected}
+        openerRef={openerRef}
+      />
     </section>
   );
 }

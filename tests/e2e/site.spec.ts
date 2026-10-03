@@ -205,3 +205,146 @@ test("todas las fotos tienen recursos válidos y acceso sin JavaScript", async (
   await expect(page).toHaveURL(/moana-1200.webp$/);
   await context.close();
 });
+
+test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
+  page,
+}) => {
+  const collections = [
+    { name: "Huntrix", ids: ["huntrix", "huntrix-poses"] },
+    {
+      name: "Cenicienta",
+      ids: ["cenicienta", "cenicienta-fiesta", "cenicienta-retrato"],
+    },
+    {
+      name: "Rapunzel",
+      ids: [
+        "rapunzel",
+        "rapunzel-jardin",
+        "detalle-rapunzel",
+        "rapunzel-portada",
+      ],
+    },
+    { name: "Ariel", ids: ["ariel", "ariel-retrato"] },
+    { name: "Moana", ids: ["moana"] },
+    { name: "Blancanieves", ids: ["blancanieves", "blancanieves-jardin"] },
+  ];
+  await page.goto("/");
+  for (const { name, ids } of collections) {
+    const card = page
+      .locator(".character-card")
+      .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await expect(
+      card.getByText(`Ver fotos · ${ids.length}`, { exact: true }),
+    ).toBeVisible();
+    const opener = card.getByRole("link", {
+      name: `Ver fotos de ${name}`,
+      exact: true,
+    });
+    await opener.click();
+    const dialog = page.getByRole("dialog", { name, exact: true });
+    const close = dialog.getByRole("button", { name: "Cerrar fotografía" });
+    await expect(close).toBeFocused();
+    for (const button of await dialog.getByRole("button").all()) {
+      const bounds = await button.boundingBox();
+      expect(bounds?.width).toBeGreaterThanOrEqual(44);
+      expect(bounds?.height).toBeGreaterThanOrEqual(44);
+    }
+    for (let index = 0; index < ids.length; index++) {
+      await expect(dialog.locator("img")).toHaveAttribute(
+        "src",
+        `/images/${ids[index]}-1200.webp`,
+      );
+      await expect(dialog.getByRole("status")).toHaveText(
+        `Foto ${index + 1} de ${ids.length}`,
+      );
+      await expect
+        .poll(() =>
+          dialog
+            .locator("img")
+            .evaluate(
+              (image) =>
+                (image as HTMLImageElement).complete &&
+                (image as HTMLImageElement).naturalWidth > 0,
+            ),
+        )
+        .toBe(true);
+      if (index < ids.length - 1) await page.keyboard.press("ArrowRight");
+      await expect(close).toBeFocused();
+    }
+    await page.keyboard.press("ArrowRight");
+    await expect(dialog.getByRole("status")).toHaveText(
+      `Foto ${ids.length} de ${ids.length}`,
+    );
+    if (ids.length === 1) {
+      await expect(dialog.getByRole("button")).toHaveCount(1);
+      await page.keyboard.press("Tab");
+      await expect(close).toBeFocused();
+    } else {
+      await page.keyboard.press("Shift+Tab");
+      await expect(
+        dialog.getByRole("button", { name: "Foto siguiente", exact: true }),
+      ).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(close).toBeFocused();
+      await dialog
+        .getByRole("button", { name: "Foto anterior", exact: true })
+        .click();
+      await expect(dialog.getByRole("status")).toHaveText(
+        `Foto ${ids.length - 1} de ${ids.length}`,
+      );
+    }
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(opener).toBeFocused();
+    const nameLink = card.getByRole("link", { name, exact: true });
+    await nameLink.focus();
+    await page.keyboard.press("Enter");
+    await expect(dialog.getByRole("status")).toHaveText(
+      `Foto 1 de ${ids.length}`,
+    );
+    await page.keyboard.press("ArrowLeft");
+    await expect(dialog.getByRole("status")).toHaveText(
+      `Foto 1 de ${ids.length}`,
+    );
+    await close.click();
+    await expect(nameLink).toBeFocused();
+    await expect(
+      card.getByRole("link", {
+        name: `Quiero conocer más sobre ${name} en WhatsApp`,
+      }),
+    ).toHaveAttribute("href", /wa.me/);
+  }
+  for (const name of ["Elsa", "Anna", "Barbie", "Bella"]) {
+    const card = page
+      .locator(".character-card")
+      .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await expect(card.locator(".character-photo-blank")).toBeVisible();
+    await expect(card.getByRole("link")).toHaveCount(1);
+    await expect(card.getByRole("link")).toHaveAttribute("href", /wa.me/);
+  }
+});
+
+test("personajes: enlaces nativos sin JavaScript y cierre por fondo", async ({
+  browser,
+  page,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const fallback = await context.newPage();
+  await fallback.goto("http://127.0.0.1:4173/");
+  await expect(
+    fallback.getByRole("link", { name: "Ver fotos de Huntrix", exact: true }),
+  ).toHaveAttribute("href", "/images/huntrix-1200.webp");
+  await fallback.getByRole("link", { name: "Cenicienta", exact: true }).click();
+  await expect(fallback).toHaveURL(/cenicienta-1200.webp$/);
+  await context.close();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const opener = page.getByRole("link", {
+    name: "Ver fotos de Huntrix",
+    exact: true,
+  });
+  await opener.click();
+  await page.mouse.click(2, 2);
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(opener).toBeFocused();
+});

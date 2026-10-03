@@ -40,7 +40,8 @@ eventos, galería y preguntas frecuentes. El mensaje de WhatsApp se genera en
 `src/lib/whatsapp.ts`. Los textos de presentación y composición están en
 `src/App.tsx`; el diseño se controla desde `src/styles.css`.
 
-- **Personajes:** añade o cambia una entrada de `characters`. Sin `photo`, la
+- **Personajes:** cada entrada de `characters` tiene un `id` estable. La foto y el
+  nombre abren su colección, con la portada primero. Sin fotos asociadas, la
   tarjeta conserva un espacio blanco y el botón de consulta.
 - **Fotos:** cada motivo usa `/images/<id>-320.webp`, `-480.webp`, `-800.webp` y `-1200.webp`.
   Coloca las cuatro versiones revisadas en `public/images` y actualiza `id` y `alt`.
@@ -78,7 +79,11 @@ La galería muestra todas las entradas de `gallery` en `src/content.ts` en un ca
 horizontal y un diálogo nativo accesible con navegación entre fotos.
 Para añadir una fotografía, incorpora sus cuatro tamaños WebP revisados a
 `public/images` y añade una entrada con `id`, `alt` y, opcionalmente, `position`
-para ajustar el encuadre. No hay un límite fijo de fotos; los archivos deben
+para ajustar el encuadre. Añade también `characterId` con el `id` del personaje
+(por ejemplo, `"huntrix"`): aparecerá tanto en la galería general como en la de
+ese personaje. No se clasifica por el nombre del archivo. Al incorporar un
+personaje nuevo, añade su identificador al tipo `CharacterId`.
+No hay un límite fijo de fotos; los archivos deben
 añadirse expresamente a la lista. No existe backend, formulario
 de captura, panel administrativo, pagos ni reservas automáticas.
 
