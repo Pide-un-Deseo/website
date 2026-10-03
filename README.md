@@ -1,56 +1,129 @@
 # Pide un Deseo — Website
 
-Repositorio para el desarrollo de la web de **Pide un Deseo**.
+Web en español de **Pide un Deseo**, servicio de princesas y animación infantil
+en La Habana. Presenta personajes, experiencias, eventos y contacto directo
+por WhatsApp, Instagram y Facebook.
 
-[Repositorio en GitHub](https://github.com/Pide-un-Deseo/website)
+**Estado:** implementación preparada para Cloudflare Pages. La URL pública se
+documentará después del primer despliegue confirmado; no hay dominio reservado.
 
-## Estado actual
+## Desarrollo local
 
-El proyecto está en preparación inicial. Contiene las reglas de exclusión de Git
-y la documentación para comenzar a colaborar. Todavía no hay una aplicación
-ejecutable ni funcionalidades implementadas.
+Requiere Node.js **22.23.2** (ver `.nvmrc`) y npm.
 
-| Decisión | Estado |
-| --- | --- |
-| Requisitos del negocio y alcance del MVP | Pendientes de definir con el responsable del negocio |
-| Diseño y contenido | Pendientes |
-| Stack y herramientas de desarrollo | Pendientes |
-| Comandos de instalación, desarrollo y pruebas | Pendientes de elegir el stack |
-| Hosting, dominio y despliegue | Pendientes |
+```sh
+npm ci
+npm run dev
+```
 
-El `.gitignore` inicial incluye exclusiones habituales de Node.js; esto no implica
-que se haya elegido un framework o una arquitectura.
+Abre la dirección local indicada por Vite. No necesita base de datos ni claves.
 
-## Cómo colaborar
+```sh
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run preview
+npx playwright install chromium
+npm run test:e2e
+```
 
-1. Lee [AGENTS.md](AGENTS.md) antes de realizar cambios.
-2. Parte de `main` actualizada y crea una rama descriptiva para cada tarea, por
-   ejemplo `feat/service-catalog`, `fix/mobile-navigation` o `chore/tooling`.
-3. Realiza cambios pequeños y usa commits descriptivos, por ejemplo
-   `docs: clarify project requirements`.
-4. Revisa el diff y ejecuta las comprobaciones disponibles para tu cambio. Mientras
-   solo exista documentación, revisa Markdown, enlaces y `git diff --check`.
-5. Publica la rama y abre un pull request cuando corresponda, explicando qué cambia
-   y cómo lo verificaste. Revisa los cambios antes de integrarlos en `main`.
+`npm run check` ejecuta lint, pruebas unitarias, compilación y pruebas de navegador.
+Estas últimas necesitan Chromium instalado. GitHub Actions ejecuta las mismas
+comprobaciones en un entorno limpio.
 
-La rama de preparación de JD3M0N es `chore/jd3m0n-project-setup`. Las siguientes
-tareas deben usar sus propias ramas una vez integrada esta preparación.
+## Editar el contenido
 
-No subas credenciales ni datos personales de clientes. Cuando el proyecto necesite
-variables de entorno, documenta sus nombres con valores ficticios en `.env.example`.
+La fuente de contenido es **`src/content.ts`**: contacto, redes, catálogo, servicios,
+eventos, galería y preguntas frecuentes. El mensaje de WhatsApp se genera en
+`src/lib/whatsapp.ts`. Los textos de presentación y composición están en
+`src/App.tsx`; el diseño se controla desde `src/styles.css`.
 
-## Próximos pasos
+- **Personajes:** añade o cambia una entrada de `characters`. Sin `photo`, la
+  tarjeta conserva un espacio blanco y el botón de consulta.
+- **Fotos:** cada motivo usa `/images/<id>-320.webp`, `-480.webp`, `-800.webp` y `-1200.webp`.
+  Coloca las cuatro versiones revisadas en `public/images` y actualiza `id` y `alt`.
+- **Servicios y eventos:** publica solo información confirmada. Las consultas no
+  reservan automáticamente; el equipo confirma disponibilidad por WhatsApp.
+- **Teléfono:** usa formato internacional con dígitos, sin espacios ni `+` en
+  `phone`; `displayPhone` controla su presentación.
 
-- Acordar los requisitos y el alcance inicial con el responsable de Pide un Deseo.
-- Elegir el stack y documentar la instalación y ejecución local.
-- Implementar las funcionalidades acordadas y sus comprobaciones.
-- Definir el despliegue y documentarlo cuando exista.
+El negocio tiene sede en La Habana Vieja y se desplaza dentro de La Habana.
+Se recomienda consultar con un mes de anticipación.
 
-Estos pasos son trabajo pendiente, no capacidades actuales del proyecto.
+## Material privado y fotografías
 
-## Autoría
+`material-pide-un-deseo/` está ignorada y nunca se copia completa al sitio.
+Se retiraron las 22 fotografías, collages y vista previa con niños identificados
+en la revisión. Los dos videos se conservan localmente y no se publican.
 
-- Organización propietaria: [Pide un Deseo](https://github.com/Pide-un-Deseo).
-- Preparación inicial y desarrollo web: [JD3M0N](https://github.com/JD3M0N).
+La aplicación usa únicamente los derivados revisados en `public/images`.
+No hay fotos de niños en esta selección. Tampoco hay videos automáticos,
+feeds sociales incrustados ni analítica de terceros.
 
-El historial de commits y los pull requests documentarán las contribuciones reales.
+`npm run prepare:media` es una herramienta manual para el mantenedor que tenga
+los originales: su lista explícita de imágenes está en `scripts/prepare-media.mjs`.
+**No forma parte de la compilación**. Una copia limpia del repositorio contiene
+todos los recursos necesarios. Revisa las imágenes antes de ampliar esa lista.
+
+## Arquitectura
+
+React + TypeScript + Vite, CSS propio, fuentes locales y contenido estático.
+La compilación genera HTML con `react-dom/server`; React añade interactividad en
+el navegador. El contenido, las preguntas frecuentes y los enlaces esenciales
+siguen disponibles sin JavaScript.
+
+La galería utiliza un diálogo nativo accesible. No existe backend, formulario
+de captura, panel administrativo, pagos ni reservas automáticas.
+
+## Cloudflare Pages
+
+1. En Cloudflare, crea un proyecto **Pages con integración Git** y conecta
+   `Pide-un-Deseo/website`. El propietario de la organización debe autorizar la
+   aplicación si GitHub lo requiere.
+2. Intenta el nombre `pideundeseo-cuba`; si no está disponible, usa
+   `pideundeseo-cuba-website`. Guarda la URL realmente asignada.
+3. Configura:
+   - Rama de producción: `main`.
+   - Directorio raíz: raíz del repositorio.
+   - Comando de compilación: `npm run build`.
+   - Directorio de salida: `dist`.
+   - Variable `NODE_VERSION`: `22.23.2`.
+   - Variable **`SITE_URL`**: el origen HTTPS real, por ejemplo la URL `pages.dev`
+     asignada, sin ruta ni barra adicional.
+4. Habilita las vistas previas de ramas. La compilación marca las ramas distintas
+   de `main` como `noindex`. Sin `SITE_URL`, también genera una vista previa
+   no indexable y no inventa URLs de producción.
+5. Revisa la vista previa y los checks del pull request antes de integrarlo.
+6. Tras publicar, comprueba WhatsApp, redes, HTTPS, `/robots.txt`,
+   `/sitemap.xml`, metadatos y una ruta inexistente (404).
+
+`SITE_URL` se lee del entorno de compilación, no de archivos `.env`.
+El ejemplo en `.env.example` es documentación. En PowerShell puedes probar:
+`$env:SITE_URL = 'https://URL-REAL.pages.dev'` antes de `npm run build`.
+No configures una URL provisional como producción.
+
+Una compilación de `main` en Cloudflare sin `SITE_URL` falla con una explicación.
+Las imágenes de redes y el logo se sirven desde el mismo sitio. `_headers`
+define política de contenido, caché de assets y cabeceras básicas de seguridad.
+
+### Actualizaciones y recuperación
+
+Trabaja en una rama, publica el cambio y revisa la vista previa antes de integrar
+el pull request. Los cambios de `main` despliegan producción automáticamente.
+Si una publicación falla, conserva la última versión correcta; utiliza el
+historial de despliegues de Pages para volver a una versión anterior y corrige
+el problema mediante otro pull request. No uses `vite preview` como servidor
+de producción.
+
+Documentación: [Vite en Cloudflare Pages](https://vite.dev/guide/static-deploy.html#cloudflare-pages)
+y [límites del plan gratuito](https://developers.cloudflare.com/pages/platform/limits/).
+El dominio propio no está incluido; se empieza con el subdominio gratuito.
+
+## Autoría y colaboración
+
+Organización: [Pide un Deseo](https://github.com/Pide-un-Deseo).
+Desarrollo: [JD3M0N](https://github.com/JD3M0N).
+
+Lee [AGENTS.md](AGENTS.md). Los commits y pull requests documentan las
+contribuciones reales. No subas secretos ni material privado de referencia.

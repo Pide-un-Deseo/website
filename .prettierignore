@@ -1,0 +1,8 @@
+public/images/
+artifacts/
+material-pide-un-deseo/
+dist/
+.build/
+node_modules/
+playwright-report/
+test-results/

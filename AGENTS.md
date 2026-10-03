@@ -5,10 +5,9 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
 
 ## Contexto y alcance
 
-- Este repositorio contiene la preparación inicial de la web de Pide un Deseo.
-- El stack, los requisitos del negocio y el despliegue están pendientes de definir.
-- Consulta el README y el código existente antes de trabajar. No des por elegidos
-  un framework, un gestor de paquetes, una base de datos o un proveedor de hosting.
+- Este repositorio contiene la web estática en español de Pide un Deseo, animación infantil en La Habana.
+- Stack: React + TypeScript estricto + Vite, npm, CSS propio y Cloudflare Pages. Sin backend.
+- Consulta el README y el código existente antes de trabajar. Mantén el stack y la arquitectura estática acordados.
 - No presentes funcionalidades previstas como implementadas ni inventes contenido
   del negocio, precios, testimonios o resultados.
 
@@ -75,3 +74,26 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
   ni hagas force push sin una instrucción explícita.
 - Describe en cada pull request el problema, el resultado y su validación. No abras
   pull requests ni publiques despliegues si la tarea no lo incluye.
+
+## Convenciones específicas de esta web
+
+- Edita datos en `src/content.ts` y utiliza `whatsappUrl` para todo contacto. Nunca
+  conviertas una consulta en una confirmación automática de reserva.
+- Conserva las cuatro tarjetas con imagen opcional: espacio blanco, nombre y
+  enlace útiles. No inventes fotografías de personajes ni testimonios.
+- `material-pide-un-deseo/` es material local ignorado. No lo copies completo ni lo
+  publiques. Solo imágenes revisadas de las animadoras pasan a `public/images`.
+- No publiques fotografías de niños. Los videos de referencia permanecen locales.
+- `prepare:media` es manual, nunca un requisito de build. La compilación debe
+  funcionar desde un checkout limpio con los recursos públicos versionados.
+- Las fuentes son locales. Evita feeds sociales, reproducción automática y scripts
+  de terceros que aumenten el coste de datos móviles.
+- Mantén el prerenderizado: no uses `window`, `document` o valores aleatorios durante
+  render. Accede al navegador solo en efectos o eventos.
+- Comprueba `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` y
+  `npm run test:e2e`. Chromium se instala con `npx playwright install chromium`.
+  Si la descarga falla y Chrome ya está instalado, usa `PLAYWRIGHT_CHANNEL=chrome`.
+- En Cloudflare configura `SITE_URL` con el origen real. Las vistas previas no se
+  indexan. No presentes un subdominio sugerido como una publicación existente.
+- Revisa móvil (360 y 390), tablet (768) y escritorio (1440), teclado, galería,
+  retorno del foco, imágenes y contenido sin JavaScript antes de entregar.
