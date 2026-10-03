@@ -1,22 +1,97 @@
-export type Photo = { id: string; alt: string; position?: string };
-export type CharacterId =
-  | "huntrix"
-  | "cenicienta"
-  | "rapunzel"
-  | "ariel"
-  | "moana"
-  | "blancanieves"
-  | "elsa"
-  | "anna"
-  | "barbie"
-  | "bella";
+import config from "./gallery-config.json" with { type: "json" };
+import generatedGallery from "./generated/gallery.json" with { type: "json" };
+
+export type CharacterId = keyof typeof config.characters;
+export type PhotoVariant = { src: string; width: number; height: number };
+export type Photo = {
+  id: string;
+  alt: string;
+  caption?: string;
+  position?: string;
+  variants: PhotoVariant[];
+};
+export type GalleryPhoto = Photo & { characterId: CharacterId };
 export type Character = {
   id: CharacterId;
   name: string;
   caption: string;
   photo?: Photo;
 };
-export type GalleryPhoto = Photo & { characterId: CharacterId };
+
+// Optional editorial details; adding a photo never requires an entry here.
+export const photoDetails: Record<
+  string,
+  { alt?: string; caption?: string; position?: string }
+> = {
+  "rapunzel/rapunzel-jardin": {
+    alt: "Rapunzel entre árboles, con su larga trenza decorada con flores",
+  },
+  "ariel/ariel-retrato": {
+    alt: "Retrato de Ariel sonriendo con su vestuario azul",
+    position: "center 20%",
+  },
+  "huntrix/huntrix-poses": {
+    alt: "Las animadoras de Huntrix interpretando una pose del grupo",
+    position: "center 20%",
+  },
+  "cenicienta/cenicienta-fiesta": {
+    alt: "Cenicienta con su vestido azul en una decoración de cuento",
+  },
+  "blancanieves/blancanieves-jardin": {
+    alt: "Blancanieves sentada junto a las flores del jardín",
+  },
+  "rapunzel/detalle-rapunzel": {
+    alt: "Detalles del vestido, la trenza y los accesorios de Rapunzel",
+  },
+  "ariel/ariel": {
+    alt: "Ariel con su vestido azul junto a un muro de piedra",
+  },
+  "blancanieves/blancanieves": {
+    alt: "Blancanieves sentada entre la hierba y las flores",
+  },
+  "rapunzel/rapunzel": {
+    alt: "Rapunzel con su trenza de flores junto a un árbol",
+  },
+  "rapunzel/rapunzel-portada": {
+    alt: "Rapunzel con su vestido lila y su larga trenza",
+  },
+  "cenicienta/cenicienta": {
+    alt: "Cenicienta con su vestido azul de princesa",
+  },
+  "cenicienta/cenicienta-retrato": {
+    alt: "Retrato de Cenicienta sonriendo con sus guantes y vestido azul",
+  },
+  "huntrix/huntrix": {
+    alt: "Las tres animadoras de Huntrix con su vestuario de colores al aire libre",
+  },
+  "moana/moana": {
+    alt: "Moana con una flor en el cabello junto a una vidriera de colores",
+  },
+};
+export const gallery: GalleryPhoto[] = generatedGallery.map((photo) => {
+  if (!(photo.characterId in config.characters))
+    throw new Error("Personaje desconocido: " + photo.characterId);
+  const characterId = photo.characterId as CharacterId;
+  return {
+    ...photo,
+    characterId,
+    alt: "Animadora caracterizada como " + config.characters[characterId].name,
+    ...photoDetails[photo.id],
+  };
+});
+export function getPhoto(id: string): GalleryPhoto {
+  const photo = gallery.find((item) => item.id === id);
+  if (!photo)
+    throw new Error(
+      "No existe la foto " +
+        id +
+        ". Ejecuta npm run gallery:prepare y revisa src/gallery-config.json.",
+    );
+  return photo;
+}
+export function largestVariant(photo: Photo): PhotoVariant {
+  return photo.variants[photo.variants.length - 1];
+}
 export const business = {
   name: "Pide un Deseo",
   handle: "@pideundeseo.cuba",
@@ -27,63 +102,22 @@ export const business = {
   location: "La Habana, Cuba",
   base: "La Habana Vieja",
 };
-export const characters: Character[] = [
-  {
-    id: "huntrix",
-    name: "Huntrix",
-    caption: "Una celebración con ritmo propio",
-    photo: {
-      id: "huntrix",
-      alt: "Las tres animadoras de Huntrix con su vestuario de colores",
-    },
+export const characters: Character[] = Object.entries(config.characters).map(
+  ([id, value]) => {
+    const characterId = id as CharacterId;
+    const cover =
+      "cover" in value ? getPhoto(characterId + "/" + value.cover) : undefined;
+    return {
+      id: characterId,
+      name: value.name,
+      caption: value.caption,
+      photo: cover,
+    };
   },
-  {
-    id: "cenicienta",
-    name: "Cenicienta",
-    caption: "La magia de un cuento",
-    photo: {
-      id: "cenicienta",
-      alt: "Nuestra Cenicienta con su vestido azul de princesa",
-    },
-  },
-  {
-    id: "rapunzel",
-    name: "Rapunzel",
-    caption: "Una aventura llena de ilusión",
-    photo: {
-      id: "rapunzel",
-      alt: "Rapunzel con su trenza de flores y vestido lila",
-    },
-  },
-  {
-    id: "ariel",
-    name: "Ariel",
-    caption: "Un mundo por descubrir",
-    photo: {
-      id: "ariel",
-      alt: "Nuestra Ariel con su cabello rojo y vestido azul",
-    },
-  },
-  {
-    id: "moana",
-    name: "Moana",
-    caption: "El espíritu de la aventura",
-    photo: { id: "moana", alt: "Nuestra animadora caracterizada como Moana" },
-  },
-  {
-    id: "blancanieves",
-    name: "Blancanieves",
-    caption: "La dulzura de los clásicos",
-    photo: {
-      id: "blancanieves",
-      alt: "Blancanieves con su vestido amarillo en un jardín",
-    },
-  },
-  { id: "elsa", name: "Elsa", caption: "Una invitada llena de magia" },
-  { id: "anna", name: "Anna", caption: "Alegría para compartir" },
-  { id: "barbie", name: "Barbie", caption: "Una celebración a todo color" },
-  { id: "bella", name: "Bella", caption: "Un encuentro de cuento" },
-];
+);
+export const presentation = Object.fromEntries(
+  Object.entries(config.presentation).map(([name, id]) => [name, getPhoto(id)]),
+) as Record<keyof typeof config.presentation, GalleryPhoto>;
 export const services = [
   {
     name: "Animación de 1 hora",
@@ -125,80 +159,6 @@ export const events = [
     title: "Fechas especiales",
     text: "Halloween, celebraciones de temporada y fechas para recordar.",
     icon: "sparkle" as const,
-  },
-];
-export const gallery: GalleryPhoto[] = [
-  {
-    id: "rapunzel-jardin",
-    characterId: "rapunzel",
-    alt: "Rapunzel entre árboles, con su larga trenza decorada con flores",
-  },
-  {
-    id: "ariel-retrato",
-    characterId: "ariel",
-    position: "center 20%",
-    alt: "Retrato de Ariel sonriendo con su vestuario azul",
-  },
-  {
-    id: "huntrix-poses",
-    characterId: "huntrix",
-    position: "center 20%",
-    alt: "Las animadoras de Huntrix interpretando una pose del grupo",
-  },
-  {
-    id: "cenicienta-fiesta",
-    characterId: "cenicienta",
-    alt: "Cenicienta con su vestido azul en una decoración de cuento",
-  },
-  {
-    id: "blancanieves-jardin",
-    characterId: "blancanieves",
-    alt: "Blancanieves sentada junto a las flores del jardín",
-  },
-  {
-    id: "detalle-rapunzel",
-    characterId: "rapunzel",
-    alt: "Detalles del vestido, la trenza y los accesorios de Rapunzel",
-  },
-  {
-    id: "ariel",
-    characterId: "ariel",
-    alt: "Ariel con su vestido azul junto a un muro de piedra",
-  },
-  {
-    id: "blancanieves",
-    characterId: "blancanieves",
-    alt: "Blancanieves sentada entre la hierba y las flores",
-  },
-  {
-    id: "rapunzel",
-    characterId: "rapunzel",
-    alt: "Rapunzel con su trenza de flores junto a un árbol",
-  },
-  {
-    id: "rapunzel-portada",
-    characterId: "rapunzel",
-    alt: "Rapunzel con su vestido lila y su larga trenza",
-  },
-  {
-    id: "cenicienta",
-    characterId: "cenicienta",
-    alt: "Cenicienta con su vestido azul de princesa",
-  },
-  {
-    id: "cenicienta-retrato",
-    characterId: "cenicienta",
-    alt: "Retrato de Cenicienta sonriendo con sus guantes y vestido azul",
-  },
-  {
-    id: "huntrix",
-    characterId: "huntrix",
-    alt: "Las tres animadoras de Huntrix con su vestuario de colores al aire libre",
-  },
-  {
-    id: "moana",
-    characterId: "moana",
-    alt: "Moana con una flor en el cabello junto a una vidriera de colores",
   },
 ];
 export function getCharacterPhotos(character: Character): GalleryPhoto[] {

@@ -77,15 +77,22 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
 
 ## Convenciones específicas de esta web
 
-- Edita datos en `src/content.ts` y utiliza `whatsappUrl` para todo contacto. Nunca
+- Edita textos en `src/content.ts`; personajes, portadas y referencias de presentación
+  están en `src/gallery-config.json`, compartido con el procesador. Utiliza
+  `whatsappUrl` para todo contacto. Nunca
   conviertas una consulta en una confirmación automática de reserva.
 - Conserva las cuatro tarjetas con imagen opcional: espacio blanco, nombre y
   enlace útiles. No inventes fotografías de personajes ni testimonios.
 - `material-pide-un-deseo/` es material local ignorado. No lo copies completo ni lo
   publiques. Solo imágenes revisadas de las animadoras pasan a `public/images`.
 - No publiques fotografías de niños. Los videos de referencia permanecen locales.
-- `prepare:media` es manual, nunca un requisito de build. La compilación debe
-  funcionar desde un checkout limpio con los recursos públicos versionados.
+- Los originales revisados de `galeria/<personaje>/` se versionan. `gallery:prepare`
+  genera las variantes WebP y el catálogo antes de build, dev, tipos y pruebas.
+  No versiones `public/images/galeria/` ni `src/generated/`, ni copies originales
+  al sitio publicado. La compilación debe funcionar desde un checkout limpio
+  sin depender de `material-pide-un-deseo/`.
+- `prepare:media` sigue siendo manual para logo, favicon y portada social, nunca
+  un requisito de build; esos recursos públicos siguen versionados.
 - Las fuentes son locales. Evita feeds sociales, reproducción automática y scripts
   de terceros que aumenten el coste de datos móviles.
 - Mantén el prerenderizado: no uses `window`, `document` o valores aleatorios durante

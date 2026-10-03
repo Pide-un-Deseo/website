@@ -1,0 +1,56 @@
+{
+  "characters": {
+    "huntrix": {
+      "name": "Huntrix",
+      "caption": "Una celebración con ritmo propio",
+      "cover": "huntrix"
+    },
+    "cenicienta": {
+      "name": "Cenicienta",
+      "caption": "La magia de un cuento",
+      "cover": "cenicienta"
+    },
+    "rapunzel": {
+      "name": "Rapunzel",
+      "caption": "Una aventura llena de ilusión",
+      "cover": "rapunzel"
+    },
+    "ariel": {
+      "name": "Ariel",
+      "caption": "Un mundo por descubrir",
+      "cover": "ariel"
+    },
+    "moana": {
+      "name": "Moana",
+      "caption": "El espíritu de la aventura",
+      "cover": "moana"
+    },
+    "blancanieves": {
+      "name": "Blancanieves",
+      "caption": "La dulzura de los clásicos",
+      "cover": "blancanieves"
+    },
+    "elsa": {
+      "name": "Elsa",
+      "caption": "Una invitada llena de magia"
+    },
+    "anna": {
+      "name": "Anna",
+      "caption": "Alegría para compartir"
+    },
+    "barbie": {
+      "name": "Barbie",
+      "caption": "Una celebración a todo color"
+    },
+    "bella": {
+      "name": "Bella",
+      "caption": "Un encuentro de cuento"
+    }
+  },
+  "presentation": {
+    "hero": "rapunzel/rapunzel-portada",
+    "small": "cenicienta/cenicienta-retrato",
+    "group": "huntrix/huntrix",
+    "about": "ariel/ariel-retrato"
+  }
+}

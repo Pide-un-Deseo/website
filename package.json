@@ -17,7 +17,12 @@
     "prepare:media": "node scripts/prepare-media.mjs",
     "check": "npm run lint && npm run test && npm run build && npm run test:e2e",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "gallery:prepare": "node scripts/prepare-gallery.mjs",
+    "prebuild": "npm run gallery:prepare",
+    "predev": "npm run gallery:prepare",
+    "pretypecheck": "npm run gallery:prepare",
+    "pretest": "npm run gallery:prepare"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.2.0",

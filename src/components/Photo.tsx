@@ -10,15 +10,20 @@ export function Photo({
   priority?: boolean;
   sizes?: string;
 }) {
+  const source =
+    photo.variants.find((variant) => variant.width >= 800) ??
+    photo.variants[photo.variants.length - 1];
   return (
     <img
       className={className}
-      src={`/images/${photo.id}-800.webp`}
-      srcSet={`/images/${photo.id}-320.webp 320w, /images/${photo.id}-480.webp 480w, /images/${photo.id}-800.webp 800w, /images/${photo.id}-1200.webp 1200w`}
+      src={source.src}
+      srcSet={photo.variants
+        .map((variant) => `${variant.src} ${variant.width}w`)
+        .join(", ")}
       sizes={sizes}
       alt={photo.alt}
-      width="800"
-      height="1000"
+      width={source.width}
+      height={source.height}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"

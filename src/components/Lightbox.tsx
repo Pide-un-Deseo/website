@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import type { Photo } from "../content";
 import { Icon } from "./Icon";
+import { largestVariant } from "../content";
 
 type LightboxProps = {
   photos: readonly Photo[];
@@ -19,6 +20,7 @@ export function Lightbox({
 }: LightboxProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const photo = selected === null ? undefined : photos[selected];
+  const source = photo ? largestVariant(photo) : undefined;
   const isOpen = Boolean(photo);
   // Changing photos must not close the dialog or restore the opener's focus.
   useEffect(() => {
@@ -87,12 +89,12 @@ export function Lightbox({
           </button>
           {title && <h2 className="lightbox-title">{title}</h2>}
           <img
-            src={`/images/${photo.id}-1200.webp`}
+            src={source?.src}
             alt={photo.alt}
-            width="800"
-            height="1000"
+            width={source?.width}
+            height={source?.height}
           />
-          <p>{photo.alt}</p>
+          {photo.caption && <p>{photo.caption}</p>}
           <div className="lightbox-navigation">
             {photos.length > 1 && (
               <button

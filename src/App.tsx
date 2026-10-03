@@ -1,3 +1,4 @@
+import { presentation } from "./content";
 import type { ReactNode } from "react";
 import {
   business,
@@ -161,7 +162,7 @@ function Hero() {
         <div className="hero-photo-main">
           <Photo
             photo={{
-              id: "rapunzel-portada",
+              ...presentation.hero,
               alt: "Rapunzel con su vestido lila entre las flores del jardín",
             }}
             priority
@@ -171,7 +172,7 @@ function Hero() {
         <div className="hero-photo-small">
           <Photo
             photo={{
-              id: "cenicienta-retrato",
+              ...presentation.small,
               alt: "Cenicienta sonriendo con su vestido azul",
             }}
             sizes="(max-width: 600px) 31vw, 16vw"
@@ -181,7 +182,7 @@ function Hero() {
         <div className="hero-photo-huntrix">
           <Photo
             photo={{
-              id: "huntrix",
+              ...presentation.group,
               alt: "Las tres animadoras de Huntrix listas para su show",
             }}
             sizes="(max-width: 600px) 36vw, 17vw"
@@ -354,7 +355,7 @@ function About() {
         <div className="about-art">
           <Photo
             photo={{
-              id: "ariel-retrato",
+              ...presentation.about,
               alt: "Ariel, uno de los personajes recreados por nuestro equipo",
             }}
             sizes="(max-width: 700px) 85vw, 40vw"

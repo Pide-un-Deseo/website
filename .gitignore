@@ -151,3 +151,7 @@ vite.config.ts.timestamp-*
 /playwright-report/
 /.wrangler/
 /.build/
+
+/public/images/galeria/
+/public/images/.galeria-temporal/
+/src/generated/

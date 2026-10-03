@@ -1,3 +1,9 @@
+import {
+  gallery,
+  characters,
+  getCharacterPhotos,
+  largestVariant,
+} from "../../src/content";
 import { test, expect } from "@playwright/test";
 test("contenido, recursos y contacto sin errores de navegador", async ({
   page,
@@ -16,8 +22,11 @@ test("contenido, recursos y contacto sin errores de navegador", async ({
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Un recuerdo",
   );
-  await expect(page.locator(".character-card")).toHaveCount(10);
-  await expect(page.locator(".character-photo-blank")).toHaveCount(4);
+  await expect(page.locator(".character-card")).toHaveCount(characters.length);
+  await expect(page.locator(".character-photo-blank")).toHaveCount(
+    characters.filter((character) => !getCharacterPhotos(character).length)
+      .length,
+  );
   await expect(
     page.getByRole("link", {
       name: "Quiero conocer más sobre Huntrix en WhatsApp",
@@ -136,7 +145,7 @@ test("carrusel completo y navegación ampliada sin perder el foco", async ({
 }) => {
   await page.goto("/");
   const photos = page.locator(".gallery-item");
-  await expect(photos).toHaveCount(14);
+  await expect(photos).toHaveCount(gallery.length);
   const previous = page.getByRole("button", { name: "Ver fotos anteriores" });
   const next = page.getByRole("button", { name: "Ver fotos siguientes" });
   await expect(previous).toBeDisabled();
@@ -146,29 +155,39 @@ test("carrusel completo y navegación ampliada sin perder el foco", async ({
   await expect(next).toBeDisabled();
   await photos.last().press("Enter");
   const dialog = page.getByRole("dialog");
-  await expect(dialog.getByRole("status")).toHaveText("Foto 14 de 14");
+  await expect(dialog.getByRole("status")).toHaveText(
+    `Foto ${gallery.length} de ${gallery.length}`,
+  );
   const close = page.getByRole("button", { name: "Cerrar fotografía" });
   await expect(close).toBeFocused();
   await page.keyboard.press("ArrowLeft");
-  await expect(dialog.getByRole("status")).toHaveText("Foto 13 de 14");
+  await expect(dialog.getByRole("status")).toHaveText(
+    `Foto ${gallery.length - 1} de ${gallery.length}`,
+  );
   await expect(close).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("ArrowRight");
-  await expect(dialog.getByRole("status")).toHaveText("Foto 14 de 14");
+  await expect(dialog.getByRole("status")).toHaveText(
+    `Foto ${gallery.length} de ${gallery.length}`,
+  );
   await page.keyboard.press("Shift+Tab");
   await expect(
     page.getByRole("button", { name: "Foto siguiente", exact: true }),
   ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(close).toBeFocused();
-  for (let index = 13; index > 0; index--) {
+  for (let index = gallery.length - 1; index > 0; index--) {
     await page
       .getByRole("button", { name: "Foto anterior", exact: true })
       .click();
   }
-  await expect(dialog.getByRole("status")).toHaveText("Foto 1 de 14");
+  await expect(dialog.getByRole("status")).toHaveText(
+    `Foto 1 de ${gallery.length}`,
+  );
   await page.keyboard.press("ArrowLeft");
-  await expect(dialog.getByRole("status")).toHaveText("Foto 1 de 14");
+  await expect(dialog.getByRole("status")).toHaveText(
+    `Foto 1 de ${gallery.length}`,
+  );
   await close.click();
   await expect(photos.last()).toBeFocused();
   await expect(dialog).not.toBeVisible();
@@ -181,11 +200,11 @@ test("todas las fotos tienen recursos válidos y acceso sin JavaScript", async (
   const page = await context.newPage();
   await page.goto("http://127.0.0.1:4173/");
   const photos = page.locator(".gallery-item");
-  await expect(photos).toHaveCount(14);
+  await expect(photos).toHaveCount(gallery.length);
   const hrefs = await photos.evaluateAll((items) =>
     items.map((item) => (item as HTMLAnchorElement).href),
   );
-  expect(new Set(hrefs).size).toBe(14);
+  expect(new Set(hrefs).size).toBe(gallery.length);
   for (const photo of await photos.all()) {
     await photo.scrollIntoViewIfNeeded();
     await expect(photo).toBeInViewport();
@@ -202,39 +221,31 @@ test("todas las fotos tienen recursos válidos y acceso sin JavaScript", async (
       .toBe(true);
   }
   await photos.last().click();
-  await expect(page).toHaveURL(/moana-1200.webp$/);
+  await expect(page).toHaveURL(
+    new URL(
+      largestVariant(gallery[gallery.length - 1]).src,
+      "http://127.0.0.1:4173",
+    ).href,
+  );
   await context.close();
 });
 
 test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
   page,
 }) => {
-  const collections = [
-    { name: "Huntrix", ids: ["huntrix", "huntrix-poses"] },
-    {
-      name: "Cenicienta",
-      ids: ["cenicienta", "cenicienta-fiesta", "cenicienta-retrato"],
-    },
-    {
-      name: "Rapunzel",
-      ids: [
-        "rapunzel",
-        "rapunzel-jardin",
-        "detalle-rapunzel",
-        "rapunzel-portada",
-      ],
-    },
-    { name: "Ariel", ids: ["ariel", "ariel-retrato"] },
-    { name: "Moana", ids: ["moana"] },
-    { name: "Blancanieves", ids: ["blancanieves", "blancanieves-jardin"] },
-  ];
+  const collections = characters
+    .map((character) => ({
+      ...character,
+      photos: getCharacterPhotos(character),
+    }))
+    .filter((character) => character.photos.length);
   await page.goto("/");
-  for (const { name, ids } of collections) {
+  for (const { name, photos } of collections) {
     const card = page
       .locator(".character-card")
       .filter({ has: page.getByRole("heading", { name, exact: true }) });
     await expect(
-      card.getByText(`Ver fotos · ${ids.length}`, { exact: true }),
+      card.getByText(`Ver fotos · ${photos.length}`, { exact: true }),
     ).toBeVisible();
     const opener = card.getByRole("link", {
       name: `Ver fotos de ${name}`,
@@ -249,13 +260,13 @@ test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
       expect(bounds?.width).toBeGreaterThanOrEqual(44);
       expect(bounds?.height).toBeGreaterThanOrEqual(44);
     }
-    for (let index = 0; index < ids.length; index++) {
+    for (let index = 0; index < photos.length; index++) {
       await expect(dialog.locator("img")).toHaveAttribute(
         "src",
-        `/images/${ids[index]}-1200.webp`,
+        largestVariant(photos[index]).src,
       );
       await expect(dialog.getByRole("status")).toHaveText(
-        `Foto ${index + 1} de ${ids.length}`,
+        `Foto ${index + 1} de ${photos.length}`,
       );
       await expect
         .poll(() =>
@@ -268,14 +279,14 @@ test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
             ),
         )
         .toBe(true);
-      if (index < ids.length - 1) await page.keyboard.press("ArrowRight");
+      if (index < photos.length - 1) await page.keyboard.press("ArrowRight");
       await expect(close).toBeFocused();
     }
     await page.keyboard.press("ArrowRight");
     await expect(dialog.getByRole("status")).toHaveText(
-      `Foto ${ids.length} de ${ids.length}`,
+      `Foto ${photos.length} de ${photos.length}`,
     );
-    if (ids.length === 1) {
+    if (photos.length === 1) {
       await expect(dialog.getByRole("button")).toHaveCount(1);
       await page.keyboard.press("Tab");
       await expect(close).toBeFocused();
@@ -290,7 +301,7 @@ test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
         .getByRole("button", { name: "Foto anterior", exact: true })
         .click();
       await expect(dialog.getByRole("status")).toHaveText(
-        `Foto ${ids.length - 1} de ${ids.length}`,
+        `Foto ${photos.length - 1} de ${photos.length}`,
       );
     }
     await page.keyboard.press("Escape");
@@ -300,11 +311,11 @@ test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
     await nameLink.focus();
     await page.keyboard.press("Enter");
     await expect(dialog.getByRole("status")).toHaveText(
-      `Foto 1 de ${ids.length}`,
+      `Foto 1 de ${photos.length}`,
     );
     await page.keyboard.press("ArrowLeft");
     await expect(dialog.getByRole("status")).toHaveText(
-      `Foto 1 de ${ids.length}`,
+      `Foto 1 de ${photos.length}`,
     );
     await close.click();
     await expect(nameLink).toBeFocused();
@@ -314,7 +325,9 @@ test("cada personaje abre solo sus fotos desde la portada y el nombre", async ({
       }),
     ).toHaveAttribute("href", /wa.me/);
   }
-  for (const name of ["Elsa", "Anna", "Barbie", "Bella"]) {
+  for (const { name } of characters.filter(
+    (character) => !getCharacterPhotos(character).length,
+  )) {
     const card = page
       .locator(".character-card")
       .filter({ has: page.getByRole("heading", { name, exact: true }) });
@@ -333,9 +346,25 @@ test("personajes: enlaces nativos sin JavaScript y cierre por fondo", async ({
   await fallback.goto("http://127.0.0.1:4173/");
   await expect(
     fallback.getByRole("link", { name: "Ver fotos de Huntrix", exact: true }),
-  ).toHaveAttribute("href", "/images/huntrix-1200.webp");
+  ).toHaveAttribute(
+    "href",
+    largestVariant(
+      getCharacterPhotos(
+        characters.find((character) => character.id === "huntrix")!,
+      )[0],
+    ).src,
+  );
   await fallback.getByRole("link", { name: "Cenicienta", exact: true }).click();
-  await expect(fallback).toHaveURL(/cenicienta-1200.webp$/);
+  await expect(fallback).toHaveURL(
+    new URL(
+      largestVariant(
+        getCharacterPhotos(
+          characters.find((character) => character.id === "cenicienta")!,
+        )[0],
+      ).src,
+      "http://127.0.0.1:4173",
+    ).href,
+  );
   await context.close();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");

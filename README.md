@@ -35,16 +35,20 @@ comprobaciones en un entorno limpio.
 
 ## Editar el contenido
 
-La fuente de contenido es **`src/content.ts`**: contacto, redes, catálogo, servicios,
-eventos, galería y preguntas frecuentes. El mensaje de WhatsApp se genera en
+Los textos y ajustes editoriales están en **`src/content.ts`**. El catálogo de
+personajes y portadas está en **`src/gallery-config.json`** y las fotografías se
+descubren desde **`galeria/`**. El mensaje de WhatsApp se genera en
 `src/lib/whatsapp.ts`. Los textos de presentación y composición están en
 `src/App.tsx`; el diseño se controla desde `src/styles.css`.
 
 - **Personajes:** cada entrada de `characters` tiene un `id` estable. La foto y el
   nombre abren su colección, con la portada primero. Sin fotos asociadas, la
   tarjeta conserva un espacio blanco y el botón de consulta.
-- **Fotos:** cada motivo usa `/images/<id>-320.webp`, `-480.webp`, `-800.webp` y `-1200.webp`.
-  Coloca las cuatro versiones revisadas en `public/images` y actualiza `id` y `alt`.
+- **Fotos:** copia originales revisados en `galeria/<personaje>/`. La preparación
+  genera WebP y el catálogo automáticamente; consulta [la guía de galería](galeria/README.md).
+- **Catálogo y portadas:** `src/gallery-config.json` es la fuente compartida por
+  la web y el procesador. Los textos opcionales de fotos siguen en
+  `photoDetails` de `src/content.ts`.
 - **Servicios y eventos:** publica solo información confirmada. Las consultas no
   reservan automáticamente; el equipo confirma disponibilidad por WhatsApp.
 - **Teléfono:** usa formato internacional con dígitos, sin espacios ni `+` en
@@ -59,14 +63,25 @@ Se recomienda consultar con un mes de anticipación.
 Se retiraron las 22 fotografías, collages y vista previa con niños identificados
 en la revisión. Los dos videos se conservan localmente y no se publican.
 
-La aplicación usa únicamente los derivados revisados en `public/images`.
-No hay fotos de niños en esta selección. Tampoco hay videos automáticos,
-feeds sociales incrustados ni analítica de terceros.
+Las 14 fotos revisadas se gestionan desde `galeria/`, fuera del directorio
+público. Solo incorpora fotografías revisadas de animadoras sin niños. Los
+originales de esta carpeta se versionan en Git; nunca copies el material privado
+completo. Los originales no se incluyen en el sitio publicado.
 
-`npm run prepare:media` es una herramienta manual para el mantenedor que tenga
-los originales: su lista explícita de imágenes está en `scripts/prepare-media.mjs`.
-**No forma parte de la compilación**. Una copia limpia del repositorio contiene
-todos los recursos necesarios. Revisa las imágenes antes de ampliar esa lista.
+`npm run gallery:prepare` convierte JPG, JPEG, PNG y WebP, corrige orientación,
+genera variantes de hasta 320, 480, 800 y 1200 píxeles sin ampliar imágenes pequeñas,
+y actualiza el catálogo. Se ejecuta automáticamente antes de desarrollo, tipos,
+pruebas unitarias y build. Si añades fotos con el servidor abierto, ejecuta el
+comando en otra terminal o reinicia desarrollo; no hay vigilancia continua.
+
+Los resultados de `public/images/galeria/` y `src/generated/` se ignoran en Git.
+Un checkout limpio genera todo desde los originales versionados y no necesita
+`material-pide-un-deseo/`. Una imagen inválida o una referencia de portada o
+presentación eliminada detiene la preparación con un mensaje que identifica el
+problema; los errores de conversión conservan los resultados anteriores.
+
+`npm run prepare:media` sigue siendo manual: prepara únicamente logo, favicon y
+portada social para quien tenga el material local. No se ejecuta durante build.
 
 ## Arquitectura
 
@@ -75,17 +90,18 @@ La compilación genera HTML con `react-dom/server`; React añade interactividad 
 el navegador. El contenido, las preguntas frecuentes y los enlaces esenciales
 siguen disponibles sin JavaScript.
 
-La galería muestra todas las entradas de `gallery` en `src/content.ts` en un carrusel
-horizontal y un diálogo nativo accesible con navegación entre fotos.
-Para añadir una fotografía, incorpora sus cuatro tamaños WebP revisados a
-`public/images` y añade una entrada con `id`, `alt` y, opcionalmente, `position`
-para ajustar el encuadre. Añade también `characterId` con el `id` del personaje
-(por ejemplo, `"huntrix"`): aparecerá tanto en la galería general como en la de
-ese personaje. No se clasifica por el nombre del archivo. Al incorporar un
-personaje nuevo, añade su identificador al tipo `CharacterId`.
-No hay un límite fijo de fotos; los archivos deben
-añadirse expresamente a la lista. No existe backend, formulario
-de captura, panel administrativo, pagos ni reservas automáticas.
+La galería muestra el catálogo generado en un carrusel horizontal y un diálogo
+nativo accesible. Cada archivo se incorpora una vez a la galería global y a la
+colección del personaje indicado por su carpeta. El orden global sigue el catálogo
+de personajes y el nombre de archivo con orden numérico; la colección individual
+muestra su portada primero. Los captions son opcionales y se mantienen textos
+alternativos accesibles. Añadir fotos no requiere editar listas ni código.
+
+La compilación de Cloudflare ejecuta la misma preparación que el entorno local,
+antes de generar HTML y JavaScript. GitHub Actions verifica el mismo flujo: no
+genera commits ni entrega archivos a Cloudflare. Ambos parten de los originales
+del repositorio. No existe backend, panel administrativo ni vigilancia de carpetas
+en la web publicada.
 
 ## Cloudflare Pages
 

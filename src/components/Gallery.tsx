@@ -1,3 +1,4 @@
+import { largestVariant } from "../content";
 import { useEffect, useRef, useState } from "react";
 import { gallery } from "../content";
 import { Photo } from "./Photo";
@@ -126,7 +127,7 @@ export function Gallery() {
             <a
               key={item.id}
               className="gallery-item"
-              href={`/images/${item.id}-1200.webp`}
+              href={largestVariant(item).src}
               aria-label={`Ampliar foto: ${item.alt}`}
               onClick={(event) => {
                 event.preventDefault();

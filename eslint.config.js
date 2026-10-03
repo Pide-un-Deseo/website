@@ -8,6 +8,8 @@ export default tseslint.config(
     ignores: [
       "dist/**",
       ".build/**",
+      ".wrangler/**",
+      "src/generated/**",
       "node_modules/**",
       "material-pide-un-deseo/**",
       "artifacts/**",

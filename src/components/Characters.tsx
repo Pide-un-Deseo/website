@@ -1,3 +1,4 @@
+import { largestVariant } from "../content";
 import { useRef, useState, type MouseEvent } from "react";
 import { characters, getCharacterPhotos, type Character } from "../content";
 import { whatsappUrl } from "../lib/whatsapp";
@@ -48,7 +49,7 @@ export function Characters() {
                 {cover ? (
                   <a
                     className="character-photo character-gallery-link"
-                    href={`/images/${cover.id}-1200.webp`}
+                    href={largestVariant(cover).src}
                     aria-label={`Ver fotos de ${character.name}`}
                     onClick={(event) => open(event, character)}
                   >
@@ -70,7 +71,7 @@ export function Characters() {
                     {cover ? (
                       <a
                         className="character-name-link"
-                        href={`/images/${cover.id}-1200.webp`}
+                        href={largestVariant(cover).src}
                         onClick={(event) => open(event, character)}
                       >
                         {character.name}
