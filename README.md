@@ -74,7 +74,12 @@ La compilación genera HTML con `react-dom/server`; React añade interactividad 
 el navegador. El contenido, las preguntas frecuentes y los enlaces esenciales
 siguen disponibles sin JavaScript.
 
-La galería utiliza un diálogo nativo accesible. No existe backend, formulario
+La galería muestra todas las entradas de `gallery` en `src/content.ts` en un carrusel
+horizontal y un diálogo nativo accesible con navegación entre fotos.
+Para añadir una fotografía, incorpora sus cuatro tamaños WebP revisados a
+`public/images` y añade una entrada con `id`, `alt` y, opcionalmente, `position`
+para ajustar el encuadre. No hay un límite fijo de fotos; los archivos deben
+añadirse expresamente a la lista. No existe backend, formulario
 de captura, panel administrativo, pagos ni reservas automáticas.
 
 ## Cloudflare Pages

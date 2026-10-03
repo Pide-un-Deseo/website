@@ -111,10 +111,12 @@ export const gallery: Photo[] = [
   },
   {
     id: "ariel-retrato",
+    position: "center 20%",
     alt: "Retrato de Ariel sonriendo con su vestuario azul",
   },
   {
     id: "huntrix-poses",
+    position: "center 20%",
     alt: "Las animadoras de Huntrix interpretando una pose del grupo",
   },
   {
@@ -128,6 +130,29 @@ export const gallery: Photo[] = [
   {
     id: "detalle-rapunzel",
     alt: "Detalles del vestido, la trenza y los accesorios de Rapunzel",
+  },
+  { id: "ariel", alt: "Ariel con su vestido azul junto a un muro de piedra" },
+  {
+    id: "blancanieves",
+    alt: "Blancanieves sentada entre la hierba y las flores",
+  },
+  { id: "rapunzel", alt: "Rapunzel con su trenza de flores junto a un árbol" },
+  {
+    id: "rapunzel-portada",
+    alt: "Rapunzel con su vestido lila y su larga trenza",
+  },
+  { id: "cenicienta", alt: "Cenicienta con su vestido azul de princesa" },
+  {
+    id: "cenicienta-retrato",
+    alt: "Retrato de Cenicienta sonriendo con sus guantes y vestido azul",
+  },
+  {
+    id: "huntrix",
+    alt: "Las tres animadoras de Huntrix con su vestuario de colores al aire libre",
+  },
+  {
+    id: "moana",
+    alt: "Moana con una flor en el cabello junto a una vidriera de colores",
   },
 ];
 export const values = [

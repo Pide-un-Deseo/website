@@ -33,6 +33,19 @@ test("contenido, recursos y contacto sin errores de navegador", async ({
     "#contacto",
   ])
     await page.locator(section).scrollIntoViewIfNeeded();
+  // Horizontal lazy-loaded photos enter the viewport only as the gallery scrolls.
+  for (const image of await page.locator("img:visible").all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (element) =>
+            (element as HTMLImageElement).complete &&
+            (element as HTMLImageElement).naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+  }
   await page.waitForLoadState("networkidle");
   expect(
     await page
@@ -58,7 +71,7 @@ test("galería accesible con Escape y retorno del foco", async ({ page }) => {
   ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(
-    page.getByRole("button", { name: "Cerrar fotografía" }),
+    page.getByRole("button", { name: "Foto anterior", exact: true }),
   ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).not.toBeVisible();
@@ -115,5 +128,80 @@ test("contenido y enlaces esenciales sin JavaScript", async ({ browser }) => {
   await expect(
     page.getByText(/Tenemos nuestra sede en La Habana Vieja/),
   ).toBeVisible();
+  await context.close();
+});
+
+test("carrusel completo y navegación ampliada sin perder el foco", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const photos = page.locator(".gallery-item");
+  await expect(photos).toHaveCount(14);
+  const previous = page.getByRole("button", { name: "Ver fotos anteriores" });
+  const next = page.getByRole("button", { name: "Ver fotos siguientes" });
+  await expect(previous).toBeDisabled();
+  await next.click();
+  await expect(previous).toBeEnabled();
+  await photos.last().focus();
+  await expect(next).toBeDisabled();
+  await photos.last().press("Enter");
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("status")).toHaveText("Foto 14 de 14");
+  const close = page.getByRole("button", { name: "Cerrar fotografía" });
+  await expect(close).toBeFocused();
+  await page.keyboard.press("ArrowLeft");
+  await expect(dialog.getByRole("status")).toHaveText("Foto 13 de 14");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  await expect(dialog.getByRole("status")).toHaveText("Foto 14 de 14");
+  await page.keyboard.press("Shift+Tab");
+  await expect(
+    page.getByRole("button", { name: "Foto siguiente", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  for (let index = 13; index > 0; index--) {
+    await page
+      .getByRole("button", { name: "Foto anterior", exact: true })
+      .click();
+  }
+  await expect(dialog.getByRole("status")).toHaveText("Foto 1 de 14");
+  await page.keyboard.press("ArrowLeft");
+  await expect(dialog.getByRole("status")).toHaveText("Foto 1 de 14");
+  await close.click();
+  await expect(photos.last()).toBeFocused();
+  await expect(dialog).not.toBeVisible();
+});
+
+test("todas las fotos tienen recursos válidos y acceso sin JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto("http://127.0.0.1:4173/");
+  const photos = page.locator(".gallery-item");
+  await expect(photos).toHaveCount(14);
+  const hrefs = await photos.evaluateAll((items) =>
+    items.map((item) => (item as HTMLAnchorElement).href),
+  );
+  expect(new Set(hrefs).size).toBe(14);
+  for (const photo of await photos.all()) {
+    await photo.scrollIntoViewIfNeeded();
+    await expect(photo).toBeInViewport();
+    await expect
+      .poll(() =>
+        photo
+          .locator("img")
+          .evaluate(
+            (image) =>
+              (image as HTMLImageElement).complete &&
+              (image as HTMLImageElement).naturalWidth > 0,
+          ),
+      )
+      .toBe(true);
+  }
+  await photos.last().click();
+  await expect(page).toHaveURL(/moana-1200.webp$/);
   await context.close();
 });
