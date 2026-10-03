@@ -2246,3 +2246,46 @@ em {
     transform: none;
   }
 }
+
+.character-gallery-link {
+  display: block;
+  position: relative;
+}
+.character-photo-count {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: #fffaf7f2;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.character-info .character-name-link {
+  display: inline-flex;
+  min-height: 44px;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+}
+.character-name-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.lightbox-title {
+  padding: 8px 60px 14px;
+  text-align: center;
+  font-size: 28px;
+  color: white;
+}
+@media (prefers-reduced-motion: reduce) {
+  .character-photo img {
+    transition: none;
+  }
+  .character-card:hover .character-photo img {
+    transform: none;
+  }
+}

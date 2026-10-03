@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import {
   business,
-  characters,
   events,
   faqs,
   included,
@@ -13,6 +12,7 @@ import { whatsappUrl } from "./lib/whatsapp";
 import { Icon } from "./components/Icon";
 import { Photo } from "./components/Photo";
 import { Gallery } from "./components/Gallery";
+import { Characters } from "./components/Characters";
 
 function WhatsAppLink({
   subject,
@@ -198,65 +198,6 @@ function Hero() {
         <span className="hero-handwriting" aria-hidden="true">
           Aquí empiezan los cuentos.
         </span>
-      </div>
-    </section>
-  );
-}
-function Characters() {
-  return (
-    <section
-      className="section characters-section"
-      id="personajes"
-      aria-labelledby="characters-title"
-    >
-      <div className="container">
-        <div className="section-heading centered">
-          <p className="eyebrow">
-            <span /> Invitados muy especiales
-          </p>
-          <h2 id="characters-title">
-            ¿Con quién sueña
-            <br />
-            <em>celebrar?</em>
-          </h2>
-          <p>
-            Un encuentro con ese personaje que tanto le gusta.
-            <br />
-            Elige su favorito y empecemos a imaginar la sorpresa.
-          </p>
-        </div>
-        <div className="character-grid">
-          {characters.map((character) => (
-            <article className="character-card" key={character.name}>
-              <div className="character-photo">
-                {character.photo ? (
-                  <Photo
-                    photo={character.photo}
-                    sizes="(max-width: 600px) 46vw, (max-width: 1000px) 30vw, 18vw"
-                  />
-                ) : (
-                  <div className="character-photo-blank" aria-hidden="true" />
-                )}
-              </div>
-              <div className="character-info">
-                <h3>{character.name}</h3>
-                <p>{character.caption}</p>
-                <a
-                  href={whatsappUrl(character.name)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Quiero conocer más sobre ${character.name} en WhatsApp`}
-                >
-                  Quiero conocer más <Icon name="arrow" />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-        <p className="section-footnote">
-          <Icon name="heart" /> Cada personaje, una manera distinta de hacerles
-          sonreír.
-        </p>
       </div>
     </section>
   );
