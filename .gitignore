@@ -141,3 +141,13 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Material privado de referencia
+/material-pide-un-deseo/
+
+# Resultados locales de validación
+/artifacts/
+/test-results/
+/playwright-report/
+/.wrangler/
+/.build/
