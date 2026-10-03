@@ -1,6 +1,6 @@
 # Validación de la primera versión
 
-Fecha: 2 de octubre de 2026.
+Fecha: 3 de octubre de 2026.
 
 ## Resultado local
 
@@ -14,6 +14,19 @@ Fecha: 2 de octubre de 2026.
 - Fotografías publicadas revisadas: solo animadoras y detalles del vestuario.
 - Carpeta de originales ignorada; 22 imágenes con niños retiradas; 2 videos conservados
   localmente y excluidos de la publicación.
+
+## Compilación reproducible y vista previa
+
+- Copia limpia con `git archive`: instalación offline, lint, pruebas, tipos y
+  compilación correctos sin la carpeta de material privado.
+- GitHub Actions: comprobaciones correctas del commit `273d1aa`.
+- Pages local: portada 200, ruta inexistente 404 y política CSP aplicada.
+- Vista previa real: https://5f4f923e.pideundeseo-cuba.pages.dev.
+- HTTPS, imágenes, galería, Escape y retorno del foco correctos; sin errores de
+  JavaScript. Sin desbordes a 360, 390, 768 y 1440 px. Respuesta 404 correcta.
+- Vista previa marcada `noindex, nofollow`.
+- Proyecto conectado a GitHub, producción desde `main`, salida `dist` y
+  `SITE_URL` configurada con la dirección real.
 
 ## Lighthouse móvil
 
@@ -50,7 +63,4 @@ Las capturas muestran una ejecución real del sitio, no un mockup.
 
 ## Pendiente de publicación
 
-Completar la conexión de Cloudflare Pages con GitHub, asignar la URL real,
-validar la vista previa remota y revisar HTTPS, robots, sitemap, imagen social
-y respuesta 404 en el despliegue. La prueba de acceso desde una conexión en
-Cuba requiere una comprobación del usuario.
+Falta integrar el pull request y verificar la publicación de producción. La prueba de acceso desde una conexión en Cuba requiere una comprobación del usuario.

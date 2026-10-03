@@ -4,8 +4,9 @@ Web en español de **Pide un Deseo**, servicio de princesas y animación infanti
 en La Habana. Presenta personajes, experiencias, eventos y contacto directo
 por WhatsApp, Instagram y Facebook.
 
-**Estado:** implementación preparada para Cloudflare Pages. La URL pública se
-documentará después del primer despliegue confirmado; no hay dominio reservado.
+**Estado:** conectado a Cloudflare Pages mediante GitHub.
+URL de producción configurada: https://pideundeseo-cuba.pages.dev.
+Las ramas de trabajo tienen vistas previas no indexables.
 
 ## Desarrollo local
 
@@ -81,16 +82,15 @@ de captura, panel administrativo, pagos ni reservas automáticas.
 1. En Cloudflare, crea un proyecto **Pages con integración Git** y conecta
    `Pide-un-Deseo/website`. El propietario de la organización debe autorizar la
    aplicación si GitHub lo requiere.
-2. Intenta el nombre `pideundeseo-cuba`; si no está disponible, usa
-   `pideundeseo-cuba-website`. Guarda la URL realmente asignada.
+2. El proyecto existente se llama `pideundeseo-cuba`; no necesitas crear otro.
 3. Configura:
    - Rama de producción: `main`.
    - Directorio raíz: raíz del repositorio.
    - Comando de compilación: `npm run build`.
    - Directorio de salida: `dist`.
    - Variable `NODE_VERSION`: `22.23.2`.
-   - Variable **`SITE_URL`**: el origen HTTPS real, por ejemplo la URL `pages.dev`
-     asignada, sin ruta ni barra adicional.
+   - Variable **`SITE_URL`**: `https://pideundeseo-cuba.pages.dev` (actualízala
+     si en el futuro se configura un dominio propio).
 4. Habilita las vistas previas de ramas. La compilación marca las ramas distintas
    de `main` como `noindex`. Sin `SITE_URL`, también genera una vista previa
    no indexable y no inventa URLs de producción.
