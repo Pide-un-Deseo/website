@@ -92,6 +92,11 @@ export function getPhoto(id: string): GalleryPhoto {
 export function largestVariant(photo: Photo): PhotoVariant {
   return photo.variants[photo.variants.length - 1];
 }
+export const developmentCredit = {
+  label: "Desarrollado por",
+  name: "JD3M0N",
+  url: "https://github.com/JD3M0N",
+};
 export const business = {
   name: "Pide un Deseo",
   handle: "@pideundeseo.cuba",

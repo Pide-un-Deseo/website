@@ -2,6 +2,7 @@ import { presentation } from "./content";
 import type { ReactNode } from "react";
 import {
   business,
+  developmentCredit,
   events,
   faqs,
   included,
@@ -565,7 +566,10 @@ function Footer() {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Pide un Deseo</span>
-          <span>Hecho con cariño, para crear ilusión.</span>
+          <span className="development-credit">
+            {developmentCredit.label}{" "}
+            <a href={developmentCredit.url}>{developmentCredit.name}</a>
+          </span>
           <a href="#inicio">Volver al inicio ↑</a>
         </div>
       </div>
