@@ -11,6 +11,8 @@ vistas previas no indexables cuando están habilitadas en Pages.
 
 ## Por dónde empezar
 
+- [Guía rápida para Rayko](docs/rayko.md): entrar en tu rama, cambiar, comprobar y publicar en main.
+
 - [Subir una foto JPG](docs/subir-fotos.md): desde GitHub o desde tu equipo.
 - [Mantenimiento y entrega a Rarkey](docs/mantenimiento.md): mapa del proyecto,
   contenido, configuración, pruebas, colaboración y recuperación.

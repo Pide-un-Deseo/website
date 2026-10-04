@@ -1,5 +1,7 @@
 # Mantenimiento y entrega a Rarkey
 
+Guía breve del flujo diario: [Rayko: trabajar y publicar](rayko.md).
+
 ## Inicio y mapa del proyecto
 
 Lee el [README](../README.md), [AGENTS.md](../AGENTS.md) y la
@@ -176,5 +178,5 @@ No uses Vite Preview como servidor de producción.
   inexistente (404), metadatos, robots y sitemap; revisa también desde móvil.
 
 Las URLs y resultados de publicación previos están en
-[el registro de validación](validation.md). Esta entrega prepara y sube una rama;
-no integra cambios ni realiza un despliegue manual de producción.
+[el registro de validación](validation.md). Para publicar cambios, sigue el flujo
+de pull request hacia main; Cloudflare realiza el despliegue automáticamente.
