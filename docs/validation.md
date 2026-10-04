@@ -1,6 +1,10 @@
-# Validación de la primera versión
+# Registro de validación
 
-Fecha: 3 de octubre de 2026.
+## Historial: primera versión (3 de octubre de 2026)
+
+Los resultados siguientes pertenecen al lanzamiento y a sus commits indicados.
+No describen una nueva ejecución sobre feat/rarkey. La galería evolucionó después:
+los originales revisados de galeria/ ahora se versionan y los derivados se generan.
 
 ## Resultado local
 
@@ -12,7 +16,7 @@ Fecha: 3 de octubre de 2026.
 - Galería: apertura, foco en cerrar, recorrido con Tab, Escape y retorno del foco.
 - Contenido y enlaces esenciales disponibles con JavaScript deshabilitado.
 - Fotografías publicadas revisadas: solo animadoras y detalles del vestuario.
-- Carpeta de originales ignorada; 22 imágenes con niños retiradas; 2 videos conservados
+- En aquella versión, carpeta de originales ignorada; 22 imágenes con niños retiradas; 2 videos conservados
   localmente y excluidos de la publicación.
 
 ## Compilación reproducible y vista previa
@@ -81,3 +85,37 @@ Auditoría del 3 de octubre de 2026 sobre https://pideundeseo-cuba.pages.dev:
 FCP 1,2 s, LCP 1,5 s, TBT 0 ms y CLS 0. Es una medición de laboratorio;
 no sustituye la comprobación desde conexiones móviles reales en Cuba.
 Informes locales: `artifacts/lighthouse-production.report.html` y `.json`.
+
+## Entrega de documentación y crédito en feat/rarkey
+
+Validación local de esta entrega, sobre la base `7fa9ec0`.
+Entorno: Windows, Node 22.23.2, npm 10.9.8 y Chromium de Playwright instalado.
+
+- `npm run lint`: correcto.
+- `npm run typecheck`: correcto.
+- `npm test`: 18 pruebas correctas en 3 archivos.
+- `npm run build`: correcto, 14 fotos preparadas y HTML prerenderizado en modo
+  vista previa no indexable.
+- `npm run test:e2e`: 19 pruebas correctas y 1 omitida (menú móvil en escritorio).
+  Incluye imágenes, galerías por personaje, teclado, Escape, retorno del foco,
+  contenido sin JavaScript y ausencia de desbordes en los cuatro tamaños.
+- Comprobación adicional del crédito en 360, 390, 768 y 1440 píxeles, con y sin
+  JavaScript: visible, enlace correcto a JD3M0N, copyright del negocio conservado,
+  navegación Tab/Shift+Tab y foco visible correctos.
+- Capturas del pie revisadas visualmente en los cuatro tamaños, guardadas en
+  `artifacts/handoff/` (ignoradas en Git).
+- Los 15 enlaces locales de los Markdown revisados apuntan a archivos existentes.
+- Prettier sobre todos los archivos modificados: correcto.
+- `git diff --check`: correcto.
+
+### Limitaciones y resultados previos
+
+`npm run format:check` global falla por 27 archivos preexistentes no modificados
+en esta entrega: configuración, workflow, lockfile, scripts, componentes y
+pruebas. No se reformatearon para evitar cambios ajenos al encargo.
+El formato de los archivos de esta tarea se comprobó por separado y pasó.
+
+No se repitieron Lighthouse ni las comprobaciones de producción del historial.
+No se hizo una instalación desde checkout limpio en esta entrega.
+La validación descrita es local; no equivale a una verificación de la futura
+vista previa de Cloudflare ni a una publicación en producción.

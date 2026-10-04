@@ -81,7 +81,8 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
   están en `src/gallery-config.json`, compartido con el procesador. Utiliza
   `whatsappUrl` para todo contacto. Nunca
   conviertas una consulta en una confirmación automática de reserva.
-- Conserva las cuatro tarjetas con imagen opcional: espacio blanco, nombre y
+- Conserva las tarjetas del catálogo, incluidas las cuatro actualmente sin foto
+  (Elsa, Anna, Barbie y Bella): espacio blanco, nombre y
   enlace útiles. No inventes fotografías de personajes ni testimonios.
 - `material-pide-un-deseo/` es material local ignorado. No lo copies completo ni lo
   publiques. Solo imágenes revisadas de las animadoras pasan a `public/images`.
@@ -104,3 +105,8 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
   indexan. No presentes un subdominio sugerido como una publicación existente.
 - Revisa móvil (360 y 390), tablet (768) y escritorio (1440), teclado, galería,
   retorno del foco, imágenes y contenido sin JavaScript antes de entregar.
+
+## Guías de mantenimiento
+
+- Consulta [la guía de fotos](docs/subir-fotos.md) y [mantenimiento](docs/mantenimiento.md).
+- Mantén los resultados históricos de validación identificados como históricos; documenta solo las nuevas comprobaciones ejecutadas.
