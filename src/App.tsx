@@ -124,7 +124,7 @@ function Hero() {
     >
       <div className="hero-copy">
         <p className="eyebrow">
-          <span /> Princesas & animación infantil
+          <span /> Animación infantil & organización de eventos
         </p>
         <h1 id="hero-title">
           Su personaje
