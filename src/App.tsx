@@ -486,9 +486,9 @@ function Contact() {
         <Icon name="sparkle" className="contact-star" />
         <p className="eyebrow">Nos encantará ser parte de su historia</p>
         <h2 id="contact-title">
-          ¿Pide un deseo
+          Pide un deseo
           <br />
-          <em>y lo hacemos realidad?</em>
+          <em>y lo hacemos realidad</em>
         </h2>
         <p>
           Cuéntanos qué imaginas para su día.

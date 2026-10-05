@@ -210,7 +210,7 @@ export const faqs = [
   {
     question: "¿Cómo funciona los combos de personajes?",
     answer:
-      "Para el servicio de 3 horas y dependencia de la temática, cuando se solicitan personajes de una misma franquicia puede obtener hasta un 15% de descuento. Consulta los detalles de los combos por WhatsApp.",
+      "Para el servicio de 3 horas y en dependencia de la temática, cuando se solicitan personajes de una misma franquicia puede obtener hasta un 15% de descuento. Consulta los detalles de los combos por WhatsApp.",
   },
   {
     question: "¿Cómo puedo asistir a un evento especial?",
