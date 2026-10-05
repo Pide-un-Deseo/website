@@ -17,7 +17,7 @@
     },
     "bella": {
       "name": "Bella",
-      "caption": "Inteligente, compasiva y amante de los libros",
+      "caption": "Inteligente, compasiva y amante de los libros"
     },
     "rapunzel": {
       "name": "Rapunzel",
@@ -26,11 +26,11 @@
     },
     "elsa": {
       "name": "Elsa",
-      "caption": "Poderosa, elegante y llena de magia",
+      "caption": "Poderosa, elegante y llena de magia"
     },
     "anna": {
       "name": "Anna",
-      "caption": "Alegre, torpe y leal",
+      "caption": "Alegre, torpe y leal"
     },
     "moana": {
       "name": "Moana",
@@ -44,7 +44,7 @@
     },
     "barbie": {
       "name": "Barbie",
-      "caption": "Un look icónico y un estilo único",
+      "caption": "Un look icónico y un estilo único"
     }
   },
   "presentation": {
