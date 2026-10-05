@@ -1,50 +1,54 @@
 {
   "characters": {
+    "blancanieves": {
+      "name": "Blancanieves",
+      "caption": "Dulce, bondadosa y optimista",
+      "cover": "blancanieves"
+    },
+    "cenicienta": {
+      "name": "Cenicienta",
+      "caption": "Amable, resiliente y soñadora",
+      "cover": "cenicienta-retrato"
+    },
+    "ariel": {
+      "name": "Ariel",
+      "caption": "Curiosa, valiente y apasionada",
+      "cover": "ariel"
+    },
+    "bella": {
+      "name": "Bella",
+      "caption": "Inteligente, compasiva y amante de los libros",
+      "cover": "bellap"
+    },
+    "rapunzel": {
+      "name": "Rapunzel",
+      "caption": "Aventurera, creativa y llena de energía",
+      "cover": "rapunzel"
+    },
+    "elsa": {
+      "name": "Elsa",
+      "caption": "Poderosa, elegante y llena de magia",
+      "cover": "elsap"
+    },
+    "anna": {
+      "name": "Anna",
+      "caption": "Alegre, torpe y leal",
+      "cover": "annap"
+    },
+    "moana": {
+      "name": "Moana",
+      "caption": "Audaz y decidida, con un espíritu libre",
+      "cover": "moana"
+    },
     "huntrix": {
       "name": "Huntrix",
       "caption": "Una celebración con ritmo propio",
       "cover": "huntrix"
     },
-    "cenicienta": {
-      "name": "Cenicienta",
-      "caption": "La magia de un cuento",
-      "cover": "cenicienta-retrato"
-    },
-    "rapunzel": {
-      "name": "Rapunzel",
-      "caption": "Una aventura llena de ilusión",
-      "cover": "rapunzel"
-    },
-    "ariel": {
-      "name": "Ariel",
-      "caption": "Un mundo por descubrir",
-      "cover": "ariel"
-    },
-    "moana": {
-      "name": "Moana",
-      "caption": "El espíritu de la aventura",
-      "cover": "moana"
-    },
-    "blancanieves": {
-      "name": "Blancanieves",
-      "caption": "La dulzura de los clásicos",
-      "cover": "blancanieves"
-    },
-    "elsa": {
-      "name": "Elsa",
-      "caption": "Una invitada llena de magia"
-    },
-    "anna": {
-      "name": "Anna",
-      "caption": "Alegría para compartir"
-    },
     "barbie": {
       "name": "Barbie",
-      "caption": "Una celebración a todo color"
-    },
-    "bella": {
-      "name": "Bella",
-      "caption": "Un encuentro de cuento"
+      "caption": "Un look icónico y un estilo único",
+      "cover": "barbiep"
     }
   },
   "presentation": {

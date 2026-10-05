@@ -142,27 +142,28 @@ export const services = [
   },
 ];
 export const included = [
+  "Interacción con los invitados",
   "Show y canciones del personaje",
   "Juegos y canciones con los niños",
-  "Felicitaciones y participación en la piñata",
-  "Interacción con los invitados",
-  "Diploma del personaje",
-  "Fotografías para recordar",
+  "Cantar felicidades junto al pastel",
+  "Participación en la piñata",
+  "Carta temática del personaje",
+  "Oportunidades ilimitadas para tomar fotos",
 ];
 export const events = [
   {
-    title: "Spa de princesas",
+    title: "Día de princesas",
     text: "Un encuentro temático para compartir un momento de cuento.",
     icon: "crown" as const,
   },
   {
-    title: "Show de Huntrix",
-    text: "Música, personajes y toda la energía de nuestras Huntrix.",
+    title: "Show de las Huntrix",
+    text: "Música, personajes y toda la energía de las Guerreras K-POP.",
     icon: "music" as const,
   },
   {
     title: "Fechas especiales",
-    text: "Halloween, celebraciones de temporada y fechas para recordar.",
+    text: "Celebraciones estacionales, días festivos y fechas para recordar.",
     icon: "sparkle" as const,
   },
 ];
@@ -214,7 +215,7 @@ export const faqs = [
   {
     question: "¿Cómo puedo asistir a un evento especial?",
     answer:
-      "Organizamos encuentros como spa de princesas, shows de Huntrix y celebraciones de temporada, para grupos de entre 25 y 35 niños. Consulta las próximas fechas y la disponibilidad por WhatsApp o en nuestras redes.",
+      "Organizamos encuentros con diferentes temáticas como ""Un día de princesas"", shows de las Huntrix y celebraciones de temporada, para grupos de entre 25 y 35 niños. Consulta las próximas fechas y la disponibilidad por WhatsApp o en nuestras redes.",
   },
   {
     question: "¿La consulta deja mi fecha reservada?",

@@ -178,13 +178,13 @@ function Hero() {
             }}
             sizes="(max-width: 600px) 31vw, 16vw"
           />
-          <span>un poquito de magia</span>
+          <span></span>
         </div>
         <div className="hero-photo-huntrix">
           <Photo
             photo={{
               ...presentation.group,
-              alt: "Las tres animadoras de Huntrix listas para su show",
+              alt: "Las animadoras de Huntrix interpretando una pose del grupo",
             }}
             sizes="(max-width: 600px) 36vw, 17vw"
           />
@@ -383,7 +383,7 @@ function About() {
           </h2>
           <p>
             Somos Pide un Deseo. Desde La Habana Vieja, llevamos a cada
-            celebración la ilusión de encontrarse con un personaje de cuento.
+            celebración la ilusión de encontrarse con un personaje de fantasía.
           </p>
           <div className="value-list">
             {values.map((value) => (
@@ -486,14 +486,14 @@ function Contact() {
         <Icon name="sparkle" className="contact-star" />
         <p className="eyebrow">Nos encantará ser parte de su historia</p>
         <h2 id="contact-title">
-          ¿Y si hacemos realidad
+          ¿Pide un deseo
           <br />
-          <em>ese deseo?</em>
+          <em>y lo hacemos realidad?</em>
         </h2>
         <p>
           Cuéntanos qué imaginas para su día.
           <br />
-          Empecemos a preparar juntos un recuerdo bonito.
+          Empecemos a preparar juntos un recuerdo inolvidable.
         </p>
         <WhatsAppLink className="button button-light">
           Escríbenos por WhatsApp
