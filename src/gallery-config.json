@@ -18,7 +18,6 @@
     "bella": {
       "name": "Bella",
       "caption": "Inteligente, compasiva y amante de los libros",
-      "cover": "bellap"
     },
     "rapunzel": {
       "name": "Rapunzel",
@@ -28,12 +27,10 @@
     "elsa": {
       "name": "Elsa",
       "caption": "Poderosa, elegante y llena de magia",
-      "cover": "elsap"
     },
     "anna": {
       "name": "Anna",
       "caption": "Alegre, torpe y leal",
-      "cover": "annap"
     },
     "moana": {
       "name": "Moana",
@@ -48,7 +45,6 @@
     "barbie": {
       "name": "Barbie",
       "caption": "Un look icónico y un estilo único",
-      "cover": "barbiep"
     }
   },
   "presentation": {
