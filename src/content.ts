@@ -207,9 +207,9 @@ export const faqs = [
       "Tenemos dos modalidades de animación: 1 hora y 3 horas. Por WhatsApp podemos ayudarte a coordinar el personaje y el servicio para tu celebración.",
   },
   {
-    question: "¿Cómo funciona la entrega de regalos?",
+    question: "¿Cómo funciona los combos de personajes?",
     answer:
-      "La familia compra el regalo y coordina con nosotras su entrega. La princesa se encarga de llevar la sorpresa al destinatario. Consulta los detalles y la disponibilidad por WhatsApp.",
+      "Para el servicio de 3 horas y dependencia de la temática, cuando se solicitan personajes de una misma franquicia puede obtener hasta un 15% de descuento. Consulta los detalles de los combos por WhatsApp.",
   },
   {
     question: "¿Cómo puedo asistir a un evento especial?",

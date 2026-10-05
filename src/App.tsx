@@ -250,22 +250,23 @@ function Services() {
           <article className="service-card gift-card">
             <div className="service-top">
               <Icon name="heart" />
-              <span>Entrega de regalos</span>
+              <span>Ofertas con descuento</span>
             </div>
             <h3>
-              Una sorpresa
+              Más personajes,
               <br />
-              de cuento
+              más diversión
             </h3>
             <p>
-              La familia elige el regalo. Nuestra princesa se encarga de hacer
-              de su entrega un momento muy especial.
+              Recibe descuentos de hasta un 15% al solicitar personajes 
+              de una misma temática.
+              
             </p>
             <WhatsAppLink
-              subject="una entrega de regalos"
+              subject="Ofertas con descuento"
               className="button button-outline"
             >
-              Preparar una sorpresa
+              Ahorra por más
             </WhatsAppLink>
           </article>
         </div>

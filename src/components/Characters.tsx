@@ -30,12 +30,12 @@ export function Characters() {
             <span /> Invitados muy especiales
           </p>
           <h2 id="characters-title">
-            ¿Con quién sueña
+            ¿Con quién sueñas
             <br />
             <em>celebrar?</em>
           </h2>
           <p>
-            Un encuentro con ese personaje que tanto le gusta.
+            Un encuentro con ese personaje que tanto le gusta a tu peque.
             <br />
             Elige su favorito y empecemos a imaginar la sorpresa.
           </p>
