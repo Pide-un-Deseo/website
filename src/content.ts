@@ -215,7 +215,7 @@ export const faqs = [
   {
     question: "¿Cómo puedo asistir a un evento especial?",
     answer:
-      "Organizamos encuentros con diferentes temáticas como ""Un día de princesas"", shows de las Huntrix y celebraciones de temporada, para grupos de entre 25 y 35 niños. Consulta las próximas fechas y la disponibilidad por WhatsApp o en nuestras redes.",
+      "Organizamos encuentros con diferentes temáticas como Un día de princesas, shows de las Huntrix y celebraciones de temporada, para grupos de entre 25 y 35 niños. Consulta las próximas fechas y la disponibilidad por WhatsApp o en nuestras redes.",
   },
   {
     question: "¿La consulta deja mi fecha reservada?",
