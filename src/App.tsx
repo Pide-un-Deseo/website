@@ -198,7 +198,7 @@ function Hero() {
           </span>
         </div>
         <span className="hero-handwriting" aria-hidden="true">
-          Aquí empiezan los cuentos.
+         
         </span>
       </div>
     </section>
