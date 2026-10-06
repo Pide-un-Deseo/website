@@ -274,8 +274,7 @@ function Services() {
           <div>
             <p className="eyebrow">En nuestras animaciones</p>
             <h3>
-              Cada encuentro tiene&nbsp;
-              <br />
+              Cada encuentro tiene<br />
               un poco de todo esto.
             </h3>
           </div>
