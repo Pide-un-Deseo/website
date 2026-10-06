@@ -275,8 +275,7 @@ function Services() {
             <p className="eyebrow">En nuestras animaciones</p>
             <h3>
               Cada encuentro tiene
-              <br />
-               un poco de todo esto.
+              <span style={{ display: 'block' }}>un poco de todo esto.</span>
             </h3>
           </div>
           <ul>
