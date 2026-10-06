@@ -19,7 +19,7 @@
 	],
 	"vars": {
 		"REVIEWS_SITE_URL": "https://pideundeseo-cuba.pages.dev",
-		"ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
-		"ACCESS_AUD": "REPLACE_WITH_ACCESS_APPLICATION_AUDIENCE",
+		"ACCESS_TEAM_DOMAIN": "pideundeseo.cloudflareaccess.com",
+		"ACCESS_AUD": "e9fe35f940d1a72a07d279c31047baf2adcb8299486f44df92222d15ffe77b10",
 	},
 }
