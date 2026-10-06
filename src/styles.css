@@ -873,6 +873,15 @@ em {
   margin: 12px auto 0;
   font-size: 12px;
 }
+.lightbox-content > .lightbox-empty {
+  max-width: min(480px, 80vw);
+  padding: 36px 28px;
+  border: 1px solid #ffffff26;
+  border-radius: 6px;
+  background: var(--plum);
+  color: #d5c8d8;
+  font-size: 14px;
+}
 .lightbox-close {
   position: absolute;
   right: 9px;
