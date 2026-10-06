@@ -17,6 +17,7 @@ import { Gallery } from "./components/Gallery";
 import { Characters } from "./components/Characters";
 import { Lightbox } from "./components/Lightbox";
 import { eventPhotos } from "./event-photos";
+import { ReviewsSection } from "../reviews/frontend/ReviewsSection";
 
 function WhatsAppLink({
   subject,
@@ -44,6 +45,7 @@ const links = [
   { href: "#personajes", label: "Personajes" },
   { href: "#servicios", label: "Experiencias" },
   { href: "#galeria", label: "Galería" },
+  { href: "#resenas", label: "Reseñas" },
   { href: "#nosotras", label: "Nuestra esencia" },
 ];
 function Header() {
@@ -625,6 +627,7 @@ export default function App() {
         <Services />
         <Events />
         <Gallery />
+        <ReviewsSection />
         <About />
         <Booking />
         <Contact />

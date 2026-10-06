@@ -6,8 +6,9 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
 ## Contexto y alcance
 
 - Este repositorio contiene la web estática en español de Pide un Deseo, animación infantil en La Habana.
-- Stack: React + TypeScript estricto + Vite, npm, CSS propio y Cloudflare Pages. Sin backend.
-- Consulta el README y el código existente antes de trabajar. Mantén el stack y la arquitectura estática acordados.
+- Stack: React + TypeScript estricto + Vite, npm, CSS propio y Cloudflare Pages.
+  El sitio principal es estático; reseñas es la única función con Pages Functions y D1.
+- Consulta el README y el código existente antes de trabajar. Mantén el stack y separa las responsabilidades de reseñas del sitio actual.
 - No presentes funcionalidades previstas como implementadas ni inventes contenido
   del negocio, precios, testimonios o resultados.
 
@@ -76,6 +77,12 @@ específicas de un `AGENTS.md` en un subdirectorio se aplican a ese ámbito.
   pull requests ni publiques despliegues si la tarea no lo incluye.
 
 ## Convenciones específicas de esta web
+
+- Todo el código propio de reseñas vive en `reviews/` (frontend, dominio,
+  servidor, almacenamiento, migraciones y pruebas). `functions/api/` contiene
+  solo adaptadores finos para Pages Functions. En `src/` y `scripts/` se permiten
+  únicamente imports, despacho de ruta y prerender mínimos; no traslades allí la
+  lógica ni los estilos de reseñas. Mantén los handlers protegidos en servidor.
 
 - Edita textos en `src/content.ts`; personajes, portadas y referencias de presentación
   están en `src/gallery-config.json`, compartido con el procesador. Utiliza

@@ -112,8 +112,9 @@ La instalación del navegador solo es necesaria si falta. Como alternativa con
 Chrome instalado, en PowerShell ejecuta `$env:PLAYWRIGHT_CHANNEL = 'chrome'`
 antes de E2E; después puedes retirarlo con
 `Remove-Item Env:PLAYWRIGHT_CHANNEL`.
-E2E sirve el build con Vite Preview en el puerto 4173: compila antes y evita
-dejar un servidor antiguo en ese puerto.
+E2E usa `wrangler pages dev` en el puerto 4173 para ejecutar Pages Functions;
+`npm run test:e2e` aplica primero las migraciones a D1 local y no reutiliza otro
+servidor.
 
 GitHub Actions ejecuta lint, tipos, Vitest, build y E2E en un entorno limpio
 para pushes a main, feat/**, fix/** y chore/**, y pull requests hacia main.
@@ -138,12 +139,33 @@ El proyecto documentado es `pideundeseo-cuba`, conectado a
 | Salida             | `dist`                               |
 | `NODE_VERSION`     | `22.23.2`                            |
 | `SITE_URL`         | `https://pideundeseo-cuba.pages.dev` |
+| Binding D1         | `REVIEWS_DB`                         |
 
 `SITE_URL` se lee del entorno de compilación, no de archivos `.env`;
 `.env.example` solo documenta el ajuste. Debe ser el origen HTTPS real sin
 ruta, consulta ni fragmento. Si se adopta un dominio propio, actualiza el ajuste
 y la documentación. Cloudflare proporciona `CF_PAGES_BRANCH` para distinguir
 producción y vistas previas.
+
+## Reseñas y D1
+
+El módulo de reseñas vive separado en `reviews/`. `functions/api/` solo contiene
+adaptadores Cloudflare. Para iniciar el entorno completo, copia
+`.dev.vars.example` como `.dev.vars`, configura `ADMIN_EMAILS` y
+`REVIEWS_SITE_URL` más un `REVIEW_RATE_LIMIT_KEY` aleatorio para HMAC; crea el D1
+local con `npm run db:migrate:local` y ejecuta `npm run dev:pages`. `.dev.vars`
+está ignorado por Git. `npm run dev` solo sirve la web visual y no ejecuta la API.
+
+Antes de desplegar, crea la base con `npx wrangler d1 create pide-un-deseo-reviews`
+y sustituye `database_id` en `wrangler.jsonc`. Aplica la migración remota de forma
+explícita con `npx wrangler d1 migrations apply pide-un-deseo-reviews --remote`.
+En Cloudflare configura el binding `REVIEWS_DB`, vars `REVIEWS_SITE_URL`,
+`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `ADMIN_EMAILS` y el secreto
+`REVIEW_RATE_LIMIT_KEY` en Pages. Crea una aplicación Cloudflare Access para
+`/admin` y `/api/admin/*`; configura el mismo dominio, audiencia y lista de
+correos que valida el servidor. No guardes valores reales ni tokens en el
+repositorio. Para preview/producción, configura bases separadas y aplica las dos
+migraciones al entorno correspondiente antes del despliegue.
 
 Sin SITE_URL, un build local es no indexable; en Cloudflare, main sin SITE_URL
 falla. Las otras ramas son no indexables incluso con SITE_URL configurada.
