@@ -569,6 +569,14 @@ function Footer() {
                 <Icon name="facebook" />
                 Facebook
               </a>
+              <a
+                href="https://whatsapp.com/channel/0029Vb7ug6P5kg7DJ63ZZx0L"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="whatsapp" />
+                Canal de WhatsApp
+              </a>
             </div>
           </div>
           <div className="footer-location">
