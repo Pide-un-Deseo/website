@@ -86,6 +86,26 @@ test("galería accesible con Escape y retorno del foco", async ({ page }) => {
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await expect(opener).toBeFocused();
 });
+test("próximos eventos abre el diálogo y devuelve el foco sin fotos", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const opener = page.getByRole("button", {
+    name: "Consultar próximos eventos",
+  });
+  await opener.click();
+  const dialog = page.getByRole("dialog", {
+    name: "Fotos del próximo evento",
+  });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByText(/Aún no hay imágenes del próximo evento/),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(opener).toBeFocused();
+});
+
 test("preguntas frecuentes operables por teclado", async ({ page }) => {
   await page.goto("/");
   const question = page.getByText("¿Con cuánto tiempo debo contactar?", {

@@ -4,12 +4,15 @@ import { Icon } from "./Icon";
 import { largestVariant } from "../content";
 
 type LightboxProps = {
-  photos: readonly Photo[];
+  photos: readonly LightboxPhoto[];
   title?: string;
   selected: number | null;
   onSelect: (index: number | null) => void;
-  openerRef: RefObject<HTMLAnchorElement | null>;
+  openerRef: RefObject<HTMLElement | null>;
 };
+
+type LightboxPhoto = Pick<Photo, "id" | "alt" | "caption"> &
+  ({ variants: Photo["variants"] } | { src: string });
 
 export function Lightbox({
   photos,
@@ -20,8 +23,12 @@ export function Lightbox({
 }: LightboxProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const photo = selected === null ? undefined : photos[selected];
-  const source = photo ? largestVariant(photo) : undefined;
-  const isOpen = Boolean(photo);
+  const source = photo
+    ? "variants" in photo
+      ? largestVariant(photo)
+      : { src: photo.src }
+    : undefined;
+  const isOpen = selected !== null;
   // Changing photos must not close the dialog or restore the opener's focus.
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -76,7 +83,7 @@ export function Lightbox({
         if (event.target === event.currentTarget) onSelect(null);
       }}
     >
-      {photo && (
+      {isOpen && (
         <div className="lightbox-content">
           <button
             type="button"
@@ -88,13 +95,21 @@ export function Lightbox({
             <Icon name="close" />
           </button>
           {title && <h2 className="lightbox-title">{title}</h2>}
-          <img
-            src={source?.src}
-            alt={photo.alt}
-            width={source?.width}
-            height={source?.height}
-          />
-          {photo.caption && <p>{photo.caption}</p>}
+          {photo ? (
+            <>
+              <img
+                src={source?.src}
+                alt={photo.alt}
+                width={source && "width" in source ? source.width : undefined}
+                height={source && "height" in source ? source.height : undefined}
+              />
+              {photo.caption && <p>{photo.caption}</p>}
+            </>
+          ) : (
+            <p className="lightbox-empty">
+              Aún no hay imágenes del próximo evento. Vuelve pronto para verlas.
+            </p>
+          )}
           <div className="lightbox-navigation">
             {photos.length > 1 && (
               <button
@@ -107,9 +122,11 @@ export function Lightbox({
                 <Icon name="arrow" className="arrow-previous" />
               </button>
             )}
-            <span role="status" aria-live="polite" aria-atomic="true">
-              Foto {(selected ?? 0) + 1} de {photos.length}
-            </span>
+            {photos.length > 0 && (
+              <span role="status" aria-live="polite" aria-atomic="true">
+                Foto {(selected ?? 0) + 1} de {photos.length}
+              </span>
+            )}
             {photos.length > 1 && (
               <button
                 type="button"

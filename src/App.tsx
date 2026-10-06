@@ -1,5 +1,5 @@
 import { presentation } from "./content";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import {
   business,
   developmentCredit,
@@ -15,6 +15,8 @@ import { Icon } from "./components/Icon";
 import { Photo } from "./components/Photo";
 import { Gallery } from "./components/Gallery";
 import { Characters } from "./components/Characters";
+import { Lightbox } from "./components/Lightbox";
+import { eventPhotos } from "./event-photos";
 
 function WhatsAppLink({
   subject,
@@ -297,6 +299,9 @@ function Services() {
   );
 }
 function Events() {
+  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
+
   return (
     <section
       className="section events-section"
@@ -335,14 +340,27 @@ function Events() {
         </div>
         <div className="events-bottom">
           <span>Descubre qué estamos preparando para la próxima ocasión.</span>
-          <WhatsAppLink
-            subject="los próximos eventos"
+          <button
+            type="button"
             className="button button-light"
+            onClick={(event) => {
+              openerRef.current = event.currentTarget;
+              setSelectedPhoto(0);
+            }}
           >
+            <Icon name="image" />
             Consultar próximos eventos
-          </WhatsAppLink>
+            <Icon name="arrow" />
+          </button>
         </div>
       </div>
+      <Lightbox
+        photos={eventPhotos}
+        title="Fotos del próximo evento"
+        selected={selectedPhoto}
+        onSelect={setSelectedPhoto}
+        openerRef={openerRef}
+      />
     </section>
   );
 }
