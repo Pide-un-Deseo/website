@@ -6,6 +6,7 @@ import { largestVariant } from "../content";
 type LightboxProps = {
   photos: readonly LightboxPhoto[];
   title?: string;
+  immersive?: boolean;
   selected: number | null;
   onSelect: (index: number | null) => void;
   openerRef: RefObject<HTMLElement | null>;
@@ -17,6 +18,7 @@ type LightboxPhoto = Pick<Photo, "id" | "alt" | "caption"> &
 export function Lightbox({
   photos,
   title,
+  immersive = false,
   selected,
   onSelect,
   openerRef,
@@ -51,7 +53,7 @@ export function Lightbox({
   return (
     <dialog
       ref={dialogRef}
-      className="lightbox"
+      className={immersive ? "lightbox lightbox-immersive" : "lightbox"}
       aria-label={title ?? "Fotografía ampliada"}
       onKeyDown={(event) => {
         if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
@@ -94,7 +96,9 @@ export function Lightbox({
           >
             <Icon name="close" />
           </button>
-          {title && <h2 className="lightbox-title">{title}</h2>}
+          {title && !immersive && (
+            <h2 className="lightbox-title">{title}</h2>
+          )}
           {photo ? (
             <>
               <img
@@ -103,7 +107,7 @@ export function Lightbox({
                 width={source && "width" in source ? source.width : undefined}
                 height={source && "height" in source ? source.height : undefined}
               />
-              {photo.caption && <p>{photo.caption}</p>}
+              {photo.caption && !immersive && <p>{photo.caption}</p>}
             </>
           ) : (
             <p className="lightbox-empty">
@@ -123,7 +127,12 @@ export function Lightbox({
               </button>
             )}
             {photos.length > 0 && (
-              <span role="status" aria-live="polite" aria-atomic="true">
+              <span
+                className={immersive ? "lightbox-status-hidden" : undefined}
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 Foto {(selected ?? 0) + 1} de {photos.length}
               </span>
             )}

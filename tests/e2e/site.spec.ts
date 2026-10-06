@@ -86,7 +86,7 @@ test("galería accesible con Escape y retorno del foco", async ({ page }) => {
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await expect(opener).toBeFocused();
 });
-test("próximos eventos abre el diálogo y devuelve el foco sin fotos", async ({
+test("próximo evento prioriza la foto y devuelve el foco al cerrar", async ({
   page,
 }) => {
   await page.goto("/");
@@ -98,9 +98,13 @@ test("próximos eventos abre el diálogo y devuelve el foco sin fotos", async ({
     name: "Fotos del próximo evento",
   });
   await expect(dialog).toBeVisible();
-  await expect(
-    dialog.getByText(/Aún no hay imágenes del próximo evento/),
-  ).toBeVisible();
+  await expect(dialog.locator("img")).toHaveAttribute(
+    "alt",
+    "Imagen del próximo evento: Halloween Operación Honmoon",
+  );
+  await expect(dialog.locator(".lightbox-title")).toHaveCount(0);
+  await expect(dialog.locator(".lightbox-content > p")).toHaveCount(0);
+  await expect(dialog.getByRole("status")).toBeHidden();
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(opener).toBeFocused();
