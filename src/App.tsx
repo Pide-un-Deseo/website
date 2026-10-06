@@ -276,7 +276,7 @@ function Services() {
             <h3>
               Cada encuentro tiene
               <br />
-              un poco de todo esto.
+               un poco de todo esto.
             </h3>
           </div>
           <ul>
