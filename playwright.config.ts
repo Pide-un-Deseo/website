@@ -25,8 +25,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run preview -- --port 4173",
-    url: "http://127.0.0.1:4173",
-    reuseExistingServer: !process.env.CI,
+    command:
+      "wrangler pages dev --ip 127.0.0.1 --port 4173 --binding REVIEW_RATE_LIMIT_KEY=e2e-only-test-key",
+    url: "http://127.0.0.1:4173/api/reviews",
+    reuseExistingServer: false,
   },
 });

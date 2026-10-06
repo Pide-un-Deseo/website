@@ -1,0 +1,25 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pide-un-deseo-website",
+	"pages_build_output_dir": "./dist",
+	"compatibility_date": "2026-10-06",
+	"d1_databases": [
+		{
+			"binding": "REVIEWS_DB",
+			"database_name": "pide-un-deseo-reviews",
+			"database_id": "67abaee4-f2f3-405f-9639-8f4c4ce72ed5",
+			"migrations_dir": "reviews/migrations",
+		},
+		{
+			"binding": "pide_un_deseo_reviews",
+			"database_name": "pide-un-deseo-reviews",
+			"database_id": "67abaee4-f2f3-405f-9639-8f4c4ce72ed5",
+			"remote": true
+		},
+	],
+	"vars": {
+		"REVIEWS_SITE_URL": "https://pideundeseo-cuba.pages.dev",
+		"ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM.cloudflareaccess.com",
+		"ACCESS_AUD": "REPLACE_WITH_ACCESS_APPLICATION_AUDIENCE",
+	},
+}

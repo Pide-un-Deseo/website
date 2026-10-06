@@ -1,7 +1,8 @@
 # Pide un Deseo — Website
 
-Web estática en español de Pide un Deseo, animación infantil en La Habana.
-React + TypeScript estricto + Vite, CSS propio y fuentes locales; sin backend.
+Web en español de Pide un Deseo, animación infantil en La Habana.
+React + TypeScript estricto + Vite, CSS propio y fuentes locales. El sitio sigue
+siendo estático; las reseñas usan Pages Functions y D1, aisladas bajo `reviews/`.
 Contacto y consultas por WhatsApp, sin confirmación automática de reservas.
 
 Web documentada: https://pideundeseo-cuba.pages.dev.
@@ -35,18 +36,24 @@ npm run dev
 ```
 
 Si ya tienes la rama local, usa `git switch feat/rarkey`.
-Abre la URL que indica Vite. No se requieren claves ni base de datos.
+`npm run dev:pages` compila, aplica la migración D1 local y abre Pages Functions.
+Para revisar solo el sitio visual, sigue disponible `npm run dev`.
+Configura el correo local, `REVIEWS_SITE_URL` y `REVIEW_RATE_LIMIT_KEY` en
+`.dev.vars` según `.dev.vars.example`; ese archivo está ignorado por Git. La
+administración permanece cerrada sin una sesión válida de Cloudflare Access.
 
 | Comando                   | Función                                                           |
 | ------------------------- | ----------------------------------------------------------------- |
-| `npm run dev`             | Prepara la galería e inicia desarrollo                            |
+| `npm run dev`             | Prepara la galería e inicia el sitio visual sin Functions/D1      |
+| `npm run dev:pages`       | Build, migración D1 local y Pages Functions                       |
+| `npm run db:migrate:local`| Aplica migraciones a D1 local                                      |
 | `npm run gallery:prepare` | Genera WebP y catálogo desde originales                           |
 | `npm run lint`            | Comprueba reglas de código                                        |
 | `npm run typecheck`       | Prepara galería y comprueba TypeScript                            |
 | `npm test`                | Prepara galería y ejecuta Vitest                                  |
 | `npm run build`           | Prepara galería, comprueba tipos y genera el sitio prerenderizado |
 | `npm run preview`         | Sirve el build local; requiere compilar antes                     |
-| `npm run test:e2e`        | Ejecuta Playwright sobre el build local                           |
+| `npm run test:e2e`        | Migra D1 local y ejecuta Playwright con Pages Functions            |
 | `npm run check`           | Ejecuta lint, pruebas, build y E2E; build comprueba tipos         |
 | `npm run format:check`    | Comprueba formato                                                 |
 | `npm run format`          | Reescribe formato; revisar el diff después                        |

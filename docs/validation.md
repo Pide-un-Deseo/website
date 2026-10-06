@@ -119,3 +119,30 @@ No se repitieron Lighthouse ni las comprobaciones de producción del historial.
 No se hizo una instalación desde checkout limpio en esta entrega.
 La validación descrita es local; no equivale a una verificación de la futura
 vista previa de Cloudflare ni a una publicación en producción.
+
+## Implementación inicial de reseñas (6 de octubre de 2026)
+
+Validación local en Windows, Node 22.23.2 y npm; la instalación se reconstruyó
+con `npm ci` desde el lockfile.
+
+- `npm ci`: correcto; `npm audit`: 0 vulnerabilidades después de fijar `sharp`
+  en 0.35.5 para la dependencia local de Wrangler/Miniflare.
+- `npm run lint`, `npm run typecheck` y `npm run build`: correctos; el build
+  generó portada, `/resena` y `/admin`.
+- `npx vitest run reviews/tests`: 34 pruebas correctas en 6 archivos.
+- `npm test`: 51 pruebas correctas y 1 fallo preexistente en
+  `src/gallery.test.ts`, que espera `cenicienta/cenicienta` antes de
+  `cenicienta/cenicienta-retrato`; la galería generada presenta el orden inverso.
+- Wrangler Pages local: `/api/reviews` y las páginas `/resena` y `/admin`
+  respondieron 200; `/api/admin/invitations` respondió 503 sin configuración de
+  Access, como se espera.
+- D1 local: migraciones aplicadas; una invitación ficticia publicó correctamente,
+  su reutilización respondió 410, y los datos de fixture se retiraron después.
+  El límite HMAC respondió 410 a los primeros 20 intentos de token inválido y
+  429 al intento 21.
+- `npm run test:e2e -- --grep "API pública"`: 2 pruebas correctas.
+- `npm run test:e2e`: el servidor Pages y D1 iniciaron, pero 26 casos no pudieron
+  lanzar Chromium porque el ejecutable de Playwright no está instalado. La
+  descarga del navegador no se completó en este entorno.
+- `git diff --check`: correcto. No se configuró ni modificó D1 remoto, Cloudflare
+  Access ni producción.

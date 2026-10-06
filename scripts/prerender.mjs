@@ -39,11 +39,6 @@ const meta = [
     '/social-cover.jpg" />',
 ];
 if (isPreview) meta.push('<meta name="robots" content="noindex, nofollow" />');
-if (siteUrl)
-  meta.push(
-    '<link rel="canonical" href="' + siteUrl + '/" />',
-    '<meta property="og:url" content="' + siteUrl + '/" />',
-  );
 const data = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -77,10 +72,62 @@ for (const prefix of [
     );
 }
 const template = await readFile("dist/index.html", "utf8");
-const html = template
-  .replace("<!--app-html-->", render())
-  .replace("<!--site-meta-->", meta.join("\n"));
-await writeFile("dist/index.html", html);
+
+function renderPage(pathname, title, description) {
+  const pageMeta = [...meta];
+  if (pathname !== "/" && !isPreview)
+    pageMeta.push('<meta name="robots" content="noindex, nofollow" />');
+  if (siteUrl) {
+    const canonical = siteUrl + (pathname === "/" ? "/" : pathname);
+    pageMeta.push(
+      '<link rel="canonical" href="' + canonical + '" />',
+      '<meta property="og:url" content="' + canonical + '" />',
+    );
+  }
+
+  return template
+    .replace("<!--app-html-->", render(pathname))
+    .replace("<!--site-meta-->", pageMeta.join("\n"))
+    .replace(/<title>[\s\S]*?<\/title>/u, "<title>" + title + "</title>")
+    .replace(
+      /<meta\s+name="description"[\s\S]*?\/>/u,
+      '<meta name="description" content="' + description + '" />',
+    )
+    .replace(
+      /<meta\s+property="og:title"[\s\S]*?\/>/u,
+      '<meta property="og:title" content="' + title + '" />',
+    )
+    .replace(
+      /<meta\s+property="og:description"[\s\S]*?\/>/u,
+      '<meta property="og:description" content="' + description + '" />',
+    );
+}
+
+await writeFile(
+  "dist/index.html",
+  renderPage(
+    "/",
+    "Pide un Deseo · Princesas y animación infantil en La Habana",
+    "Su personaje favorito, un recuerdo para siempre. Princesas, Huntrix y animación infantil en La Habana. Shows, juegos y momentos mágicos. Consulta por WhatsApp.",
+  ),
+);
+for (const page of [
+  {
+    pathname: "/resena",
+    title: "Tu reseña · Pide un Deseo",
+    description: "Comparte tu experiencia con Pide un Deseo.",
+  },
+  {
+    pathname: "/admin",
+    title: "Administración de reseñas · Pide un Deseo",
+    description: "Panel privado de administración de reseñas.",
+  },
+]) {
+  await writeFile(
+    "dist" + page.pathname + ".html",
+    renderPage(page.pathname, page.title, page.description),
+  );
+}
 await writeFile(
   "dist/robots.txt",
   isPreview
