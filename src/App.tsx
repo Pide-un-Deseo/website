@@ -356,6 +356,7 @@ function Events() {
       <Lightbox
         photos={eventPhotos}
         title="Fotos del próximo evento"
+        immersive
         selected={selectedPhoto}
         onSelect={setSelectedPhoto}
         openerRef={openerRef}

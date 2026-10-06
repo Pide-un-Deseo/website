@@ -851,6 +851,29 @@ em {
   color: white;
   overflow: visible;
 }
+.lightbox-immersive {
+  max-width: 98vw;
+  max-height: 96dvh;
+}
+.lightbox-immersive .lightbox-content {
+  max-height: 96dvh;
+  overflow: visible;
+}
+.lightbox-immersive .lightbox-content > img {
+  max-width: 94vw;
+  max-height: 84dvh;
+}
+.lightbox-immersive .lightbox-status-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .lightbox::backdrop {
   background: #211721ed;
   backdrop-filter: blur(7px);
