@@ -13,7 +13,13 @@ export const onRequestGet: PagesFunction<ReviewsEnvironment> = async ({
 }) => {
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
-  return handleApi(() => listInvitations(env.REVIEWS_DB));
+  return handleApi(() =>
+    listInvitations(
+      env.REVIEWS_DB,
+      env.REVIEWS_SITE_URL,
+      env.INVITATION_ENCRYPTION_KEY,
+    ),
+  );
 };
 
 export const onRequestPost: PagesFunction<ReviewsEnvironment> = async ({
@@ -23,7 +29,12 @@ export const onRequestPost: PagesFunction<ReviewsEnvironment> = async ({
   const authError = await requireAdmin(request, env);
   if (authError) return authError;
   return handleApi(
-    () => createInvitation(env.REVIEWS_DB, env.REVIEWS_SITE_URL),
+    () =>
+      createInvitation(
+        env.REVIEWS_DB,
+        env.REVIEWS_SITE_URL,
+        env.INVITATION_ENCRYPTION_KEY,
+      ),
     201,
   );
 };

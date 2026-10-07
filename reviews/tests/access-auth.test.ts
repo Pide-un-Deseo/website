@@ -5,6 +5,7 @@ const environment = {
   REVIEWS_DB: {} as never,
   REVIEWS_SITE_URL: "https://example.com",
   REVIEW_RATE_LIMIT_KEY: "test-rate-limit-key",
+  INVITATION_ENCRYPTION_KEY: "test-invitation-encryption-key",
   ACCESS_TEAM_DOMAIN: "team.cloudflareaccess.com",
   ACCESS_AUD: "expected-audience",
   ADMIN_EMAILS: "owner@example.com",

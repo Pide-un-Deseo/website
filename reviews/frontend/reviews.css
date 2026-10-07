@@ -334,6 +334,11 @@
   font-size: 10px;
   text-transform: uppercase;
 }
+.review-invitation-url {
+  display: block;
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
 .review-text-action {
   min-height: 44px;
   padding: 8px 10px;
@@ -348,6 +353,9 @@
 .review-text-action:disabled {
   cursor: wait;
   opacity: 0.55;
+}
+.review-delete-action {
+  color: #a12626;
 }
 .review-admin-list {
   display: grid;

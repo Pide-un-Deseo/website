@@ -76,6 +76,25 @@ export function AdminPage() {
     }
   }
 
+  async function removeInvitation(id: string) {
+    if (!window.confirm("¿Eliminar permanentemente esta invitación revocada?"))
+      return;
+    setPending(true);
+    setError("");
+    try {
+      await reviewsApi.deleteInvitation(id);
+      await load();
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error
+          ? deleteError.message
+          : "No pudimos eliminar la invitación.",
+      );
+    } finally {
+      setPending(false);
+    }
+  }
+
   async function hide(id: string) {
     setPending(true);
     setError("");
@@ -159,6 +178,7 @@ export function AdminPage() {
                   <th>Creada</th>
                   <th>Vencimiento</th>
                   <th>Estado</th>
+                  <th>Enlace</th>
                   <th>Acción</th>
                 </tr>
               </thead>
@@ -177,6 +197,27 @@ export function AdminPage() {
                       <td>{displayDate(invitation.expires_at)}</td>
                       <td>{status}</td>
                       <td>
+                        {invitation.url ? (
+                          <>
+                            <code className="review-invitation-url">
+                              {invitation.url}
+                            </code>
+                            <a
+                              className="review-text-action"
+                              href={`https://wa.me/?text=${encodeURIComponent(`Te invitamos a compartir tu experiencia: ${invitation.url}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Reenviar por WhatsApp
+                            </a>
+                          </>
+                        ) : invitation.status === "active" ? (
+                          "Enlace no recuperable"
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                      <td>
                         {invitation.status === "active" &&
                           !invitation.expired && (
                             <button
@@ -188,6 +229,16 @@ export function AdminPage() {
                               Revocar
                             </button>
                           )}
+                        {invitation.status === "revoked" && (
+                          <button
+                            className="review-text-action review-delete-action"
+                            type="button"
+                            onClick={() => void removeInvitation(invitation.id)}
+                            disabled={pending}
+                          >
+                            Eliminar
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
