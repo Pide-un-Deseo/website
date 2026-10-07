@@ -151,8 +151,9 @@ producción y vistas previas.
 
 El módulo de reseñas vive separado en `reviews/`. `functions/api/` solo contiene
 adaptadores Cloudflare. Para iniciar el entorno completo, copia
-`.dev.vars.example` como `.dev.vars`, configura `ADMIN_EMAILS` y
-`REVIEWS_SITE_URL` más un `REVIEW_RATE_LIMIT_KEY` aleatorio para HMAC; crea el D1
+`.dev.vars.example` como `.dev.vars`, configura `ADMIN_EMAILS`,
+`REVIEWS_SITE_URL`, un `REVIEW_RATE_LIMIT_KEY` aleatorio para HMAC y un
+`INVITATION_ENCRYPTION_KEY` separado, aleatorio y estable; crea el D1
 local con `npm run db:migrate:local` y ejecuta `npm run dev:pages`. `.dev.vars`
 está ignorado por Git. `npm run dev` solo sirve la web visual y no ejecuta la API.
 
@@ -160,12 +161,18 @@ Antes de desplegar, crea la base con `npx wrangler d1 create pide-un-deseo-revie
 y sustituye `database_id` en `wrangler.jsonc`. Aplica la migración remota de forma
 explícita con `npx wrangler d1 migrations apply pide-un-deseo-reviews --remote`.
 En Cloudflare configura el binding `REVIEWS_DB`, vars `REVIEWS_SITE_URL`,
-`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `ADMIN_EMAILS` y el secreto
-`REVIEW_RATE_LIMIT_KEY` en Pages. Crea una aplicación Cloudflare Access para
+`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `ADMIN_EMAILS` y los secretos
+`REVIEW_RATE_LIMIT_KEY` e `INVITATION_ENCRYPTION_KEY` en Pages. Crea una aplicación Cloudflare Access para
 `/admin` y `/api/admin/*`; configura el mismo dominio, audiencia y lista de
 correos que valida el servidor. No guardes valores reales ni tokens en el
-repositorio. Para preview/producción, configura bases separadas y aplica las dos
+repositorio. Para preview/producción, configura bases separadas y aplica las
 migraciones al entorno correspondiente antes del despliegue.
+
+Los enlaces de invitación se conservan cifrados para poder reenviarlos desde el
+panel. Mantén `INVITATION_ENCRYPTION_KEY` estable y respáldala de forma segura:
+si se pierde o cambia, los enlaces guardados ya no se podrán recuperar. Los
+tokens creados antes de la migración no se pueden reconstruir porque solo se
+almacenó su hash.
 
 Sin SITE_URL, un build local es no indexable; en Cloudflare, main sin SITE_URL
 falla. Las otras ramas son no indexables incluso con SITE_URL configurada.

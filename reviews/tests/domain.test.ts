@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   createInvitationToken,
+  decryptInvitationToken,
+  encryptInvitationToken,
   hashInvitationToken,
 } from "../domain/invitation-token";
 import { parseReviewSubmission, ReviewInputError } from "../domain/review";
@@ -79,5 +81,22 @@ describe("invitation tokens", () => {
     expect(hash).toMatch(/^[a-f0-9]{64}$/u);
     expect(hash).not.toContain(first);
     expect(await hashInvitationToken(first)).toBe(hash);
+  });
+
+  it("encrypts recoverable tokens and rejects the wrong key", async () => {
+    const token = createInvitationToken();
+    const secret = "test-invitation-encryption-key-0123456789";
+    const encrypted = await encryptInvitationToken(token, secret);
+
+    expect(encrypted).not.toContain(token);
+    await expect(decryptInvitationToken(encrypted, secret)).resolves.toBe(
+      token,
+    );
+    await expect(
+      decryptInvitationToken(
+        encrypted,
+        "different-invitation-encryption-key-0123456789",
+      ),
+    ).rejects.toThrow();
   });
 });

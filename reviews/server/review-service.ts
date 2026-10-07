@@ -1,15 +1,18 @@
 import {
+  decryptInvitationToken,
+  encryptInvitationToken,
   createInvitationToken,
   hashInvitationToken,
 } from "../domain/invitation-token";
 import { parseReviewSubmission, ReviewInputError } from "../domain/review";
 import {
   consumeInvitationAndPublish,
+  deleteRevokedInvitation,
   hideReview,
   insertInvitation,
   invitationIsUsable,
   listAdminReviews,
-  listInvitations,
+  listInvitations as listStoredInvitations,
   listPublishedReviews,
   revokeInvitation,
 } from "../storage/d1-store";
@@ -32,9 +35,34 @@ export class ReviewsConfigurationError extends Error {
 export async function createInvitation(
   database: ReviewsDatabase,
   origin: string,
+  encryptionSecret: string,
   now = new Date(),
   lifetimeDays = 30,
 ) {
+  const configuredOrigin = parseReviewsOrigin(origin);
+  if (!encryptionSecret?.trim()) throw new ReviewsConfigurationError();
+
+  const token = createInvitationToken();
+  const id = crypto.randomUUID();
+  const createdAt = now.toISOString();
+  const expiresAt = new Date(
+    now.getTime() + lifetimeDays * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  await insertInvitation(database, {
+    id,
+    tokenHash: await hashInvitationToken(token),
+    tokenCiphertext: await encryptInvitationToken(token, encryptionSecret),
+    createdAt,
+    expiresAt,
+  });
+
+  const url = new URL("/resena", configuredOrigin.origin);
+  url.hash = new URLSearchParams({ token }).toString();
+  return { id, createdAt, expiresAt, url: url.href };
+}
+
+function parseReviewsOrigin(origin: string): URL {
   let configuredOrigin: URL;
   try {
     configuredOrigin = new URL(origin);
@@ -52,24 +80,33 @@ export async function createInvitation(
     configuredOrigin.hash
   )
     throw new ReviewsConfigurationError();
+  return configuredOrigin;
+}
 
-  const token = createInvitationToken();
-  const id = crypto.randomUUID();
-  const createdAt = now.toISOString();
-  const expiresAt = new Date(
-    now.getTime() + lifetimeDays * 24 * 60 * 60 * 1000,
-  ).toISOString();
-
-  await insertInvitation(database, {
-    id,
-    tokenHash: await hashInvitationToken(token),
-    createdAt,
-    expiresAt,
-  });
-
-  const url = new URL("/resena", configuredOrigin.origin);
-  url.hash = new URLSearchParams({ token }).toString();
-  return { id, createdAt, expiresAt, url: url.href };
+export async function listInvitations(
+  database: ReviewsDatabase,
+  origin: string,
+  encryptionSecret: string,
+  now = new Date(),
+) {
+  const configuredOrigin = parseReviewsOrigin(origin);
+  if (!encryptionSecret?.trim()) throw new ReviewsConfigurationError();
+  const invitations = await listStoredInvitations(database, now.toISOString());
+  return Promise.all(
+    invitations.map(async ({ encryptedToken, ...invitation }) => {
+      if (
+        !encryptedToken ||
+        invitation.status !== "active" ||
+        invitation.expired
+      )
+        return { ...invitation, url: null };
+      const url = new URL("/resena", configuredOrigin.origin);
+      url.hash = new URLSearchParams({
+        token: await decryptInvitationToken(encryptedToken, encryptionSecret),
+      }).toString();
+      return { ...invitation, url: url.href };
+    }),
+  );
 }
 
 export async function submitReview(
@@ -99,9 +136,9 @@ export async function submitReview(
 }
 
 export {
+  deleteRevokedInvitation,
   hideReview,
   listAdminReviews,
-  listInvitations,
   listPublishedReviews,
   revokeInvitation,
 };

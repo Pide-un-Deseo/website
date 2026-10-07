@@ -26,7 +26,7 @@ export default defineConfig({
   ],
   webServer: {
     command:
-      "wrangler pages dev --ip 127.0.0.1 --port 4173 --binding REVIEW_RATE_LIMIT_KEY=e2e-only-test-key",
+      "wrangler pages dev --ip 127.0.0.1 --port 4173 --binding REVIEW_RATE_LIMIT_KEY=e2e-only-test-key --binding INVITATION_ENCRYPTION_KEY=e2e-only-invitation-encryption-key",
     url: "http://127.0.0.1:4173/api/reviews",
     reuseExistingServer: false,
   },

@@ -36,9 +36,13 @@ type InvitationRow = {
   status: "active" | "used" | "revoked";
   created_at: string;
   expires_at: string;
+  token_ciphertext: string | null;
 };
 
-export type InvitationSummary = InvitationRow & { expired: boolean };
+export type InvitationSummary = Omit<InvitationRow, "token_ciphertext"> & {
+  encryptedToken: string | null;
+  expired: boolean;
+};
 
 function toReview(row: ReviewRow): ReviewRecord {
   return {
@@ -64,7 +68,12 @@ function toPublicReview(row: ReviewRow): PublicReview {
 }
 
 function toInvitation(row: InvitationRow, now: string): InvitationSummary {
-  return { ...row, expired: row.status === "active" && row.expires_at <= now };
+  const { token_ciphertext, ...invitation } = row;
+  return {
+    ...invitation,
+    encryptedToken: token_ciphertext,
+    expired: row.status === "active" && row.expires_at <= now,
+  };
 }
 
 export async function listPublishedReviews(
@@ -111,7 +120,7 @@ export async function listInvitations(
 ): Promise<InvitationSummary[]> {
   const result = await database
     .prepare(
-      `SELECT id, status, created_at, expires_at
+      `SELECT id, status, created_at, expires_at, token_ciphertext
        FROM review_invitations ORDER BY created_at DESC LIMIT 200`,
     )
     .all<InvitationRow>();
@@ -123,18 +132,21 @@ export async function insertInvitation(
   invitation: {
     id: string;
     tokenHash: string;
+    tokenCiphertext: string;
     createdAt: string;
     expiresAt: string;
   },
 ): Promise<void> {
   await database
     .prepare(
-      `INSERT INTO review_invitations (id, token_hash, status, created_at, expires_at)
-       VALUES (?, ?, 'active', ?, ?)`,
+      `INSERT INTO review_invitations
+         (id, token_hash, token_ciphertext, status, created_at, expires_at)
+       VALUES (?, ?, ?, 'active', ?, ?)`,
     )
     .bind(
       invitation.id,
       invitation.tokenHash,
+      invitation.tokenCiphertext,
       invitation.createdAt,
       invitation.expiresAt,
     )
@@ -208,6 +220,20 @@ export async function revokeInvitation(
     .prepare(
       `UPDATE review_invitations SET status = 'revoked'
        WHERE id = ? AND status = 'active'`,
+    )
+    .bind(id)
+    .run();
+  return result.meta.changes === 1;
+}
+
+export async function deleteRevokedInvitation(
+  database: ReviewsDatabase,
+  id: string,
+): Promise<boolean> {
+  const result = await database
+    .prepare(
+      `DELETE FROM review_invitations
+       WHERE id = ? AND status = 'revoked'`,
     )
     .bind(id)
     .run();

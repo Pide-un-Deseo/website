@@ -19,6 +19,7 @@ export type Invitation = {
   created_at: string;
   expires_at: string;
   expired: boolean;
+  url: string | null;
 };
 
 export type AdminReview = PublicReview & {
@@ -77,8 +78,13 @@ export const reviewsApi = {
     requestJson<{ revoked: true }>(
       `/api/admin/invitations/${encodeURIComponent(id)}`,
       {
-        method: "DELETE",
+        method: "PATCH",
       },
+    ),
+  deleteInvitation: (id: string) =>
+    requestJson<{ deleted: true }>(
+      `/api/admin/invitations/${encodeURIComponent(id)}`,
+      { method: "DELETE" },
     ),
   hideReview: (id: string) =>
     requestJson<{ hidden: true }>(
